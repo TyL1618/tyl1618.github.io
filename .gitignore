@@ -6,3 +6,9 @@ exam/exams-plain/
 
 # 套件目錄不進版控
 node_modules/
+
+# exam/ 底下只有網站本身的資料夾會進版控；其餘子資料夾一律不進（段考範圍的課本／考卷照片有著作權，只放本機）
+exam/*/
+!exam/exams/
+!exam/assets/
+!exam/tools/
