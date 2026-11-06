@@ -169,12 +169,20 @@
     const list = exams.length
       ? h('ul', { class: 'exam-list' }, exams.map((ex) =>
           h('li', null,
-            h('a', { class: 'exam-card', href: '#/exam/' + encodeURIComponent(ex.id) },
-              h('span', { class: 'exam-date', text: ex.title }),
-              h('span', { class: 'exam-count', text: `${ex.questionCount} 題` }),
-              h('span', { class: 'exam-scope', text: ex.scope }),
-              h('span', { class: 'exam-go', 'aria-hidden': 'true', text: '開始作答 ›' })
-            )
+            ex.locked
+              // 鎖住的考卷：只顯示卡片，沒有連結（檔案本身也沒有發布）
+              ? h('div', { class: 'exam-card is-locked', 'aria-disabled': 'true' },
+                  h('span', { class: 'exam-date', text: ex.title }),
+                  h('span', { class: 'exam-count', text: `${ex.questionCount} 題` }),
+                  h('span', { class: 'exam-scope', text: ex.scope }),
+                  h('span', { class: 'exam-go', text: '🔒 尚未開放' })
+                )
+              : h('a', { class: 'exam-card', href: '#/exam/' + encodeURIComponent(ex.id) },
+                  h('span', { class: 'exam-date', text: ex.title }),
+                  h('span', { class: 'exam-count', text: `${ex.questionCount} 題` }),
+                  h('span', { class: 'exam-scope', text: ex.scope }),
+                  h('span', { class: 'exam-go', 'aria-hidden': 'true', text: '開始作答 ›' })
+                )
           )))
       : h('p', { class: 'status', text: '目前還沒有考卷。' });
 

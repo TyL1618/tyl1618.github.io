@@ -96,6 +96,7 @@ exam/
     index.json        考卷清單 —— 由工具產生，不要手動編輯
     0915.json …       每份考卷一個檔案（答案欄位已加密）
   exams-plain/        明文備份，gitignore，只在本機
+  exams-locked/       「鎖住」的考卷（明文），gitignore，只在本機；首頁只顯示一張點不了的卡片
   assets/
     grammar-summary.pdf   首頁的「文法講義」
   tools/build.mjs     驗證所有考卷 JSON + 重新產生 exams/index.json（Node，無相依套件）
@@ -126,6 +127,15 @@ exam/
    ```bash
    cd /d "C:\Users\tyl16\Documents\Private\tylw" && node exam\tools\build.mjs && git add exam && git commit -m "Add weekly exam" && git push
    ```
+
+### 先出好、但暫時鎖住的考卷
+
+想提前出好一份、卻不讓學生看到內容或點進去時：
+
+1. 明文 JSON 放在 `exam/exams-locked/<id>.json`（資料夾被 `.gitignore` 擋住，不會進 git、也不會上線）。
+2. 跑 `node exam/tools/build.mjs`：驗證通過後，`index.json` 會多一筆 `"locked": true`（沒有 `file`），首頁顯示一張虛線、半透明、「🔒 尚未開放」的卡片，不是連結，點不了；直接輸入 `#/exam/<id>` 也只會得到「找不到這份考卷」，因為檔案根本沒有發布。
+3. 要開放時：`node exam/tools/build.mjs --unlock <id>`——把檔案從 `exams-locked/` 搬進 `exams/`、加密、更新 index.json（拿掉 locked），再 `git add exam`、commit、push。
+4. 鎖住的卷子明文只在本機；換電腦或重 clone 後會不見，要留備份請放別處。
 
 ### 答案加密
 

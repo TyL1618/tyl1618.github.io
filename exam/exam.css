@@ -87,6 +87,9 @@ a { color: var(--accent); }
   box-shadow: var(--shadow);
 }
 .exam-card:hover { border-color: var(--accent); }
+.exam-card.is-locked { border-style: dashed; box-shadow: none; opacity: .65; cursor: not-allowed; user-select: none; }
+.exam-card.is-locked:hover { border-color: var(--line); }
+.exam-card.is-locked .exam-go { color: var(--muted); }
 .exam-date { font-size: 1.25rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .exam-scope { grid-column: 1; color: var(--muted); font-size: .95rem; }
 .exam-count { grid-column: 2; grid-row: 1; color: var(--muted); font-size: .95rem; text-align: right; }

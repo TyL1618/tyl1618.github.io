@@ -2,16 +2,22 @@
 // 用法：node exam/tools/build.mjs               驗證 + 加密新考卷 + 產生 index.json
 //       node exam/tools/build.mjs --check       只驗證，不寫任何檔案
 //       node exam/tools/build.mjs --decode 0915 把已加密的考卷還原成明文，輸出到 exam/exams-plain/（不會被 git 提交）
+//       node exam/tools/build.mjs --unlock 1117 把「鎖住」的考卷（exam/exams-locked/，只在本機）開放：搬進 exams/ 並加密，接著照常 build
 //
+// 鎖住的考卷：明文放在 exam/exams-locked/<id>.json（被 .gitignore 擋住，不會進 git、也不會上線）。
+// 首頁清單仍會出現一張「尚未開放」的卡片（index.json 裡 locked: true、沒有 file），學生點不了，
+// 也猜不到網址，因為檔案根本沒有發布。
+
 // 加密只是輕度混淆（base64）：目的是讓學生打開 JSON 時不會直接看到明文答案，
 // 不是真正的安全機制。答案、中譯、解析三個欄位會被收進一個 "secret" 欄位。
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const examRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const examsDir = join(examRoot, 'exams');
 const plainDir = join(examRoot, 'exams-plain');
+const lockedDir = join(examRoot, 'exams-locked');
 const argv = process.argv.slice(2);
 const checkOnly = argv.includes('--check');
 
@@ -83,6 +89,29 @@ if (di !== -1) {
   process.exit(0);
 }
 
+/* ---------- --unlock <id> ---------- */
+
+const ui = argv.indexOf('--unlock');
+if (ui !== -1) {
+  const id = argv[ui + 1];
+  if (!id || !/^[A-Za-z0-9_-]+$/.test(id)) {
+    console.error('用法：node exam/tools/build.mjs --unlock <考卷id>');
+    process.exit(1);
+  }
+  const src = join(lockedDir, `${id}.json`);
+  const dest = join(examsDir, `${id}.json`);
+  if (!existsSync(src)) {
+    console.error(`找不到鎖住的考卷 ${src}`);
+    process.exit(1);
+  }
+  if (existsSync(dest)) {
+    console.error(`exams/ 已經有 ${id}.json，請先處理重複的 id`);
+    process.exit(1);
+  }
+  renameSync(src, dest);
+  console.log(`🔓 已開放 ${id}：exams-locked/ → exams/（以下照常驗證並加密）`);
+}
+
 /* ---------- 驗證 ---------- */
 
 const errors = [];
@@ -100,20 +129,26 @@ function validDate(title) {
   return d.getUTCFullYear() === +m[1] && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3];
 }
 
-const files = readdirSync(examsDir)
+const listJson = (dir) => (existsSync(dir) ? readdirSync(dir) : [])
   .filter((f) => f.endsWith('.json') && f !== 'index.json')
   .sort();
 
-if (files.length === 0) err('exams/', '', '沒有找到任何考卷 JSON');
+const sources = [
+  ...listJson(examsDir).map((f) => ({ f, dir: examsDir, locked: false })),
+  ...listJson(lockedDir).map((f) => ({ f, dir: lockedDir, locked: true }))
+];
+
+if (sources.length === 0) err('exams/', '', '沒有找到任何考卷 JSON');
 
 const entries = [];
 const toEncrypt = []; // 目前還是明文的檔案
 const seenIds = new Map();
 
-for (const file of files) {
+for (const { f, dir, locked } of sources) {
+  const file = locked ? `exams-locked/${f}` : f; // 錯誤訊息用的名稱
   let exam;
   try {
-    exam = JSON.parse(readFileSync(join(examsDir, file), 'utf8'));
+    exam = JSON.parse(readFileSync(join(dir, f), 'utf8'));
   } catch (e) {
     err(file, '', `不是合法的 JSON（${e.message}）`);
     continue;
@@ -141,7 +176,7 @@ for (const file of files) {
   if (!isStr(exam.id) || !/^[A-Za-z0-9_-]+$/.test(exam.id)) {
     err(file, '', 'id 必須是只含英數、底線、連字號的字串');
   } else {
-    if (exam.id + '.json' !== file) err(file, '', `id "${exam.id}" 必須和檔名一致（應為 ${exam.id}.json）`);
+    if (exam.id + '.json' !== f) err(file, '', `id "${exam.id}" 必須和檔名一致（應為 ${exam.id}.json）`);
     if (seenIds.has(exam.id)) err(file, '', `id "${exam.id}" 與 ${seenIds.get(exam.id)} 重複`);
     else seenIds.set(exam.id, file);
   }
@@ -206,15 +241,12 @@ for (const file of files) {
   }
 
   if (isStr(exam.id) && isStr(exam.title) && isStr(exam.scope) && isInt(exam.questionCount)) {
-    entries.push({
-      id: exam.id,
-      title: exam.title,
-      scope: exam.scope,
-      questionCount: exam.questionCount,
-      file: `exams/${file}`
-    });
+    const entry = { id: exam.id, title: exam.title, scope: exam.scope, questionCount: exam.questionCount };
+    if (locked) entry.locked = true; // 鎖住的不給 file，網站上只會是一張點不了的卡片
+    else entry.file = `exams/${f}`;
+    entries.push(entry);
   }
-  if (!wasEncrypted) toEncrypt.push({ file, exam });
+  if (!wasEncrypted && !locked) toEncrypt.push({ file: f, exam });
 }
 
 for (const w of warnings) console.warn(`⚠ ${w}`);
@@ -240,5 +272,5 @@ if (checkOnly) {
   }
   writeFileSync(join(examsDir, 'index.json'), JSON.stringify({ exams: entries }, null, 2) + '\n', 'utf8');
   console.log(`✓ ${entries.length} 份考卷驗證通過，已更新 exams/index.json`);
-  for (const e of entries) console.log(`  ${e.title}  ${e.id}  ${e.questionCount} 題  ${e.scope}`);
+  for (const e of entries) console.log(`  ${e.title}  ${e.id}  ${e.questionCount} 題  ${e.locked ? '🔒鎖住  ' : ''}${e.scope}`);
 }
