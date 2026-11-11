@@ -92,6 +92,7 @@ exam/                      線上考卷系統（自成一格）
 exam/
   index.html          單頁應用：首頁（考卷列表）＋考卷頁，用 URL hash 切換（#/、#/exam/1006）
   exam.css / exam.js
+  schedule.json       首頁底部的「段考日期」（手動維護，不是 build 產生）：events[] 每筆 {name, start, end, scope?}，日期 YYYY-MM-DD；考完（end 早於今天）自動不顯示，最近一場顯示「還有 N 天」；檔案不存在就整塊不顯示
   exams/
     index.json        考卷清單 —— 由工具產生，不要手動編輯
     0915.json …       每份考卷一個檔案（答案欄位已加密）

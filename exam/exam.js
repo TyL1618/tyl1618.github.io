@@ -153,9 +153,35 @@
 
   /* ---------- 首頁 ---------- */
 
+  // 段考日期（schedule.json，手動維護；讀不到就不顯示，不影響考卷列表）
+  const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
+  const ymd = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const mdw = (s) => { const d = ymd(s); return `${d.getMonth() + 1}/${d.getDate()}（${WEEKDAYS[d.getDay()]}）`; };
+
+  function scheduleEl(events) {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const upcoming = events.filter((ev) => ymd(ev.end) >= today); // 考完的就不顯示
+    if (!upcoming.length) return null;
+    return h('section', { class: 'schedule' },
+      h('strong', { text: '段考日期' }),
+      h('ul', null, upcoming.map((ev, i) => {
+        const days = Math.round((ymd(ev.start) - today) / 86400000);
+        const when = ev.start === ev.end ? mdw(ev.start) : `${mdw(ev.start)} – ${mdw(ev.end)}`;
+        const left = i > 0 ? '' : days > 0 ? `還有 ${days} 天` : '考試中';
+        return h('li', null,
+          h('span', { class: 'sch-name', text: ev.name }),
+          h('span', { class: 'sch-when', text: when }),
+          left && h('span', { class: 'sch-left', text: left }),
+          ev.scope && h('span', { class: 'sch-scope', text: `範圍：${ev.scope}` })
+        );
+      }))
+    );
+  }
+
   async function showHome(token) {
     document.title = BASE_TITLE;
-    let data;
+    let data, schedule = null;
     try {
       data = await fetchJSON('exams/index.json');
     } catch (e) {
@@ -163,6 +189,7 @@
       showMessage('讀不到考卷清單。請透過網址開啟本頁（不能直接雙擊 index.html）。');
       return;
     }
+    try { schedule = scheduleEl((await fetchJSON('schedule.json')).events || []); } catch (e) { /* 沒有就不顯示 */ }
     if (token !== routeToken) return;
 
     const exams = data.exams || [];
@@ -192,6 +219,7 @@
         h('p', { text: '選一份考卷開始作答。交卷後會馬上看到分數、錯題與每題解析。' })
       ),
       list,
+      schedule,
       h('section', { class: 'handout' },
         h('strong', { text: '文法講義' }),
         h('a', { href: 'assets/grammar-summary.pdf', target: '_blank', rel: 'noopener', text: '開啟 PDF' }),
