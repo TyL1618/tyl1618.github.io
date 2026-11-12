@@ -11,7 +11,7 @@
   html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif; color: #cfd8ea; }
   canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
   canvas:active { cursor: grabbing; }
-  #ui { position: fixed; top: 12px; left: 12px; width: min(310px, calc(100vw - 24px)); max-height: calc(100vh - 24px); overflow: auto; padding: 14px 16px; border-radius: 14px; background: rgba(8, 12, 24, .62); border: 1px solid rgba(160, 190, 255, .16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 13px; line-height: 1.5; transition: opacity .25s; }
+  #ui { position: fixed; top: 12px; left: 12px; width: min(310px, calc(100vw - 24px)); max-height: calc(100vh - 170px); overflow: auto; padding: 14px 16px; border-radius: 14px; background: rgba(8, 12, 24, .62); border: 1px solid rgba(160, 190, 255, .16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 13px; line-height: 1.5; transition: opacity .25s; }
   #ui.hidden { opacity: 0; pointer-events: none; }
   #ui h1 { margin: 0 0 2px; font-size: 15px; font-weight: 600; color: #eaf0ff; letter-spacing: .04em; }
   #stat { color: #8fa0c4; font-variant-numeric: tabular-nums; margin-bottom: 10px; min-height: 1.5em; }
@@ -25,6 +25,10 @@
   input[type=range] { width: 100%; accent-color: #7f9cff; }
   .hint { margin-top: 10px; font-size: 12px; color: #6b7a9c; }
   #info { color: #8fa0c4; font-size: 12px; margin: -2px 0 8px; font-variant-numeric: tabular-nums; }
+  #hud { position: fixed; left: 12px; bottom: 12px; max-width: calc(100vw - 24px); padding: 10px 14px; border-radius: 12px; background: rgba(8, 12, 24, .55); border: 1px solid rgba(160, 190, 255, .14); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: 12.5px; line-height: 1.65; color: #9fb0d4; font-variant-numeric: tabular-nums; pointer-events: none; transition: opacity .25s; }
+  #hud.hidden { opacity: 0; }
+  #hud b { color: #eaf0ff; font-weight: 600; }
+  #hud .dim { color: #6b7a9c; }
   #toggle { position: fixed; top: 12px; right: 12px; opacity: .55; }
   #msg { position: fixed; inset: 0; display: none; place-items: center; text-align: center; padding: 24px; line-height: 1.8; font-size: 15px; background: #05070d; }
   #msg.show { display: grid; }
@@ -39,6 +43,12 @@
   <div id="stat">載入中…</div>
   <label class="sl">自旋 a/M <input id="spin" type="range" min="0" max="0.999" step="0.001" value="0.99"><output></output></label>
   <div id="info"></div>
+  <div class="row"><label>黑洞質量 <select id="mass">
+    <option value="10">10 M☉（恆星級）</option>
+    <option value="4300000">430 萬 M☉（人馬座 A*）</option>
+    <option value="100000000" selected>1 億 M☉（卡岡圖雅）</option>
+    <option value="6500000000">65 億 M☉（M87*）</option>
+  </select></label></div>
   <div class="lbl">畫面風格</div>
   <div class="row" id="modes">
     <button data-m="0">電影風</button>
@@ -65,8 +75,9 @@
     <button id="pause" title="空白鍵">暫停</button>
   </div>
   <label><input id="auto" type="checkbox"> 鏡頭緩慢起伏</label>
-  <div class="hint">拖曳旋轉 · 滾輪／雙指縮放 · 空白鍵暫停 · 1–4 切換視角 · M 切換風格 · H 隱藏面板<br>把自旋拉到 0 就是上一頁的史瓦西黑洞；拉到 0.999 接近電影裡的卡岡圖雅。</div>
+  <div class="hint">拖曳旋轉 · 滾輪／雙指縮放 · 空白鍵暫停 · 1–4 切換視角 · M 切換風格 · H 隱藏面板<br>把自旋拉到 0 就是上一頁的史瓦西黑洞；拉到 0.999 接近電影裡的卡岡圖雅。<br>畫面只取決於「距離是幾個 M」；選不同質量只會改變左下角換算出來的真實公里數，不會改變畫面。</div>
 </div>
+<div id="hud"></div>
 <button id="toggle" title="H">面板</button>
 <div id="msg"></div>
 
@@ -346,7 +357,28 @@ fn fs(@builtin(position) fc: vec4f) -> @location(0) vec4f {
 // ───────────────────────── 小工具 ─────────────────────────
 const $ = (id) => document.getElementById(id);
 const canvas = $('c');
-function fail(html) { $('msg').innerHTML = '<div>' + html + '</div>'; $('msg').classList.add('show'); $('ui').classList.add('hidden'); }
+function fail(html) { $('msg').innerHTML = '<div>' + html + '</div>'; $('msg').classList.add('show'); $('ui').classList.add('hidden'); $('hud').classList.add('hidden'); }
+
+// ── 把幾何單位（M = GM/c²）換算成真實長度 ──
+const KM_PER_SOLAR_M = 1.4766;      // 1 個太陽質量的 GM/c²，約 1.4766 公里
+const AU_KM = 149597870.7;
+const C_KMS = 299792.458;
+const trim = (v, d = 2) => String(+v.toFixed(d));
+function fmtKm(km) {
+  if (km < 1e4) return trim(km, km < 100 ? 1 : 0) + ' 公里';
+  if (km < 1e8) return trim(km / 1e4, 1) + ' 萬公里';
+  if (km < 1e12) return trim(km / 1e8, 2) + ' 億公里';
+  return trim(km / 1e12, 2) + ' 兆公里';
+}
+function fmtAU(km) { const a = km / AU_KM; return trim(a, a < 10 ? 2 : a < 100 ? 1 : 0) + ' AU'; }
+function fmtTime(s) {
+  if (s < 1) return trim(s * 1000, 1) + ' 毫秒';
+  if (s < 60) return trim(s, 1) + ' 秒';
+  if (s < 3600) return trim(s / 60, 1) + ' 分鐘';
+  if (s < 86400) return trim(s / 3600, 1) + ' 小時';
+  return trim(s / 86400, 1) + ' 天';
+}
+function fmtMass(m) { return m < 1e4 ? trim(m, 0) : m < 1e8 ? trim(m / 1e4, 1) + ' 萬' : trim(m / 1e8, 2) + ' 億'; }
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const norm3 = (v) => { const l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; };
 const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
@@ -400,7 +432,8 @@ async function main() {
   const traceBG = device.createBindGroup({ layout: tracePipe.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: traceUBO } }] });
 
   // ── UI ──
-  const state = { mode: 0, gain: 1, speed: 1, bloom: 1, spin: 0.99, quality: 'auto', auto: false, paused: false };
+  const state = { mode: 0, gain: 1, speed: 1, bloom: 1, spin: 0.99, mass: 1e8, quality: 'auto', auto: false, paused: false };
+  $('mass').addEventListener('change', (e) => { state.mass = +e.target.value; });
   const modeBtns = [...document.querySelectorAll('#modes button')];
   const setMode = (m) => { state.mode = m; modeBtns.forEach((b) => b.classList.toggle('on', +b.dataset.m === m)); };
   modeBtns.forEach((b) => b.addEventListener('click', () => setMode(+b.dataset.m)));
@@ -418,7 +451,7 @@ async function main() {
   const pauseBtn = $('pause');
   const togglePause = () => { state.paused = !state.paused; pauseBtn.textContent = state.paused ? '繼續' : '暫停'; pauseBtn.classList.toggle('on', state.paused); };
   pauseBtn.addEventListener('click', togglePause);
-  const toggleUI = () => $('ui').classList.toggle('hidden');
+  const toggleUI = () => { $('ui').classList.toggle('hidden'); $('hud').classList.toggle('hidden'); };
   $('toggle').addEventListener('click', toggleUI);
 
   const cam = { yaw: 0.5, pitch: 0.13, dist: 64, dir: 1 };
@@ -473,7 +506,7 @@ async function main() {
 
   // ── 每一幀 ──
   const TAN = Math.tan(50 * Math.PI / 360);
-  let last = performance.now(), statT = 0, diskT = 0;
+  let last = performance.now(), statT = 0, hudT = 0, diskT = 0;
   function frame(now) {
     requestAnimationFrame(frame);
     const dtReal = Math.min(100, now - last); last = now;
@@ -513,6 +546,18 @@ async function main() {
     pass(ctx.getCurrentTexture().createView(), compPipe, compBG);
     device.queue.submit([enc.finish()]);
 
+    if (now - hudT > 100) {
+      hudT = now;
+      const kmPerM = state.mass * KM_PER_SOLAR_M;
+      const rh = horizonOf(state.spin), disk = 30;
+      const dKm = cam.dist * kmPerM;
+      $('hud').innerHTML =
+        `距離黑洞中心 <b>${trim(cam.dist, 1)} M</b>（離視界 ${trim(cam.dist - rh, 1)} M）<br>` +
+        `≈ <b>${fmtKm(dKm)}</b> = ${fmtAU(dKm)}，光要走 ${fmtTime(dKm / C_KMS)}<br>` +
+        `事件視界半徑 ${trim(rh, 3)} M ≈ ${fmtKm(rh * kmPerM)}（${fmtAU(rh * kmPerM)}）<br>` +
+        `吸積盤 ${trim(iscoOf(state.spin), 2)}～${disk} M ≈ ${fmtAU(iscoOf(state.spin) * kmPerM)}～${fmtAU(disk * kmPerM)}<br>` +
+        `<span class="dim">質量 ${fmtMass(state.mass)} M☉ → 1 M = ${fmtKm(kmPerM)}　·　地球到太陽 = 1 AU，海王星 ≈ 30 AU</span>`;
+    }
     if (now - statT > 400) {
       statT = now;
       $('stat').textContent = `${(1000 / Math.max(emaDt, 0.1)).toFixed(0)} FPS · 光線解析度 ${HW}×${HH} · ${gpuName}`;
