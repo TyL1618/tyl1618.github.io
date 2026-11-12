@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>黑洞實驗 · WebGPU</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif; color: #cfd8ea; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+  canvas:active { cursor: grabbing; }
+  #ui { position: fixed; top: 12px; left: 12px; width: min(300px, calc(100vw - 24px)); max-height: calc(100vh - 24px); overflow: auto; padding: 14px 16px; border-radius: 14px; background: rgba(8, 12, 24, .62); border: 1px solid rgba(160, 190, 255, .16); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: 13px; line-height: 1.5; transition: opacity .25s; }
+  #ui.hidden { opacity: 0; pointer-events: none; }
+  #ui h1 { margin: 0 0 2px; font-size: 15px; font-weight: 600; color: #eaf0ff; letter-spacing: .04em; }
+  #stat { color: #8fa0c4; font-variant-numeric: tabular-nums; margin-bottom: 10px; min-height: 1.5em; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .lbl { width: 100%; font-size: 12px; color: #6b7a9c; margin-bottom: -2px; }
+  button, select { font: inherit; color: inherit; background: rgba(120, 150, 255, .1); border: 1px solid rgba(160, 190, 255, .22); border-radius: 8px; padding: 4px 10px; cursor: pointer; }
+  button:hover, select:hover { background: rgba(120, 150, 255, .2); }
+  button.on { background: rgba(120, 160, 255, .38); border-color: rgba(190, 210, 255, .55); color: #fff; }
+  label.sl { display: grid; grid-template-columns: 4.6em 1fr 2.6em; align-items: center; gap: 8px; margin-bottom: 4px; color: #9fb0d4; }
+  label.sl output { text-align: right; font-variant-numeric: tabular-nums; color: #7d8db0; }
+  input[type=range] { width: 100%; accent-color: #7f9cff; }
+  .hint { margin-top: 10px; font-size: 12px; color: #6b7a9c; }
+  #toggle { position: fixed; top: 12px; right: 12px; opacity: .55; }
+  #msg { position: fixed; inset: 0; display: none; place-items: center; text-align: center; padding: 24px; line-height: 1.8; font-size: 15px; background: #05070d; }
+  #msg.show { display: grid; }
+  #msg code { background: rgba(255,255,255,.08); padding: 1px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="ui">
+  <h1>WebGPU 黑洞（卡岡圖雅風）</h1>
+  <div id="stat">載入中…</div>
+  <div class="lbl">畫面風格</div>
+  <div class="row" id="modes">
+    <button data-m="0">電影風</button>
+    <button data-m="1">物理真實</button>
+  </div>
+  <div class="lbl">視角</div>
+  <div class="row" id="views">
+    <button data-v="cine">電影視角</button>
+    <button data-v="top">近乎俯視</button>
+    <button data-v="edge">正側面</button>
+    <button data-v="close">貼近黑洞</button>
+  </div>
+  <label class="sl">吸積盤亮度 <input id="gain" type="range" min="0.2" max="3" step="0.05" value="1"><output></output></label>
+  <label class="sl">吸積盤轉速 <input id="speed" type="range" min="0" max="3" step="0.05" value="1"><output></output></label>
+  <label class="sl">光暈 <input id="bloom" type="range" min="0" max="3" step="0.05" value="1"><output></output></label>
+  <div class="row">
+    <label>畫質 <select id="quality">
+      <option value="auto" selected>自動</option>
+      <option value="0.5">低 0.5×</option>
+      <option value="0.75">中 0.75×</option>
+      <option value="1">高 1×</option>
+    </select></label>
+    <button id="pause" title="空白鍵">暫停</button>
+  </div>
+  <label><input id="auto" type="checkbox"> 鏡頭緩慢起伏</label>
+  <div class="hint">拖曳旋轉 · 滾輪／雙指縮放 · 空白鍵暫停 · 1–4 切換視角 · M 切換風格 · H 隱藏面板<br>不自轉（史瓦西）黑洞；每個像素的光線都沿著彎曲時空逐步積分。</div>
+</div>
+<button id="toggle" title="H">面板</button>
+<div id="msg"></div>
+
+<script type="module">
+// ───────────────────────── WGSL ─────────────────────────
+// 單位：史瓦西半徑 rs = 1（事件視界在 r = 1、光子球在 r = 1.5、最內穩定軌道 ISCO 在 r = 3）。
+const FULLSCREEN_VS = /* wgsl */`
+@vertex
+fn vs(@builtin(vertex_index) i: u32) -> @builtin(position) vec4f {
+  let p = vec2f(f32((i << 1u) & 2u), f32(i & 2u));
+  return vec4f(p * 2.0 - 1.0, 0.0, 1.0);
+}`;
+
+const TRACE_WGSL = FULLSCREEN_VS + /* wgsl */`
+struct U { eye: vec4f, right: vec4f, up: vec4f, fwd: vec4f, a: vec4f, b: vec4f };
+// a = (hdr寬, hdr高, tan(fov/2), 吸積盤時間)   b = (都卜勒強度 0~1, 吸積盤亮度, 吸積盤外緣, 0)
+@group(0) @binding(0) var<uniform> u: U;
+
+const RIN: f32 = 3.0;
+const MAXSTEPS: i32 = 420;
+
+fn h1(p: vec3f) -> f32 { return fract(sin(dot(p, vec3f(12.9898, 78.233, 37.719))) * 43758.5453); }
+
+fn vnoise(p: vec3f) -> f32 {
+  let i = floor(p);
+  let f = fract(p);
+  let w = f * f * (3.0 - 2.0 * f);
+  let a = mix(mix(h1(i), h1(i + vec3f(1.0, 0.0, 0.0)), w.x),
+              mix(h1(i + vec3f(0.0, 1.0, 0.0)), h1(i + vec3f(1.0, 1.0, 0.0)), w.x), w.y);
+  let b = mix(mix(h1(i + vec3f(0.0, 0.0, 1.0)), h1(i + vec3f(1.0, 0.0, 1.0)), w.x),
+              mix(h1(i + vec3f(0.0, 1.0, 1.0)), h1(i + vec3f(1.0, 1.0, 1.0)), w.x), w.y);
+  return mix(a, b, w.z);
+}
+
+fn fbm(p: vec3f) -> f32 {
+  var a = 0.5;
+  var q = p;
+  var s = 0.0;
+  for (var k = 0; k < 4; k++) {
+    s += a * vnoise(q);
+    q = q * 2.03 + vec3f(1.7, 9.2, 3.1);
+    a *= 0.5;
+  }
+  return s;
+}
+
+fn starLayer(dir: vec3f, scale: f32, thr: f32, pa: f32) -> vec3f {
+  let ip = floor(dir * scale);
+  if (h1(ip) < thr) { return vec3f(0.0); }
+  let ctr = ip + 0.15 + 0.7 * vec3f(h1(ip + 3.1), h1(ip + 9.7), h1(ip + 23.9));
+  let d = length(dir - normalize(ctr));
+  let r = 1.6 * pa;
+  let m = 1.0 - smoothstep(0.0, r, d);
+  let b = pow(h1(ip + 5.5), 6.0) * 1.8 + 0.12;
+  let tint = mix(vec3f(1.0, 0.75, 0.55), vec3f(0.62, 0.76, 1.0), h1(ip + 8.8));
+  return tint * (m * m * b);
+}
+
+// 背景：星空 + 銀河帶 + 星雲。被黑洞扭曲的是「光線抵達無限遠時的方向」，用它來取樣。
+fn sky(d: vec3f, pa: f32) -> vec3f {
+  let band = exp(-pow(dot(d, normalize(vec3f(0.2, 0.85, 0.45))) * 3.2, 2.0));
+  let mw = fbm(d * 3.0 + 7.0);
+  var s = starLayer(d, 40.0, 0.6, pa) * 0.8 + starLayer(d, 90.0, 0.82, pa) * 0.5;
+  s += starLayer(d, 200.0, 0.95 - 0.2 * band, pa) * 0.4;
+  s += vec3f(1.0, 0.8, 0.62) * (0.045 * band * (0.2 + 1.1 * mw));
+  s += vec3f(0.38, 0.17, 0.55) * (smoothstep(0.45, 0.9, fbm(d * 2.2 + 5.0)) * 0.025 * (0.3 + band));
+  s += vec3f(0.004, 0.006, 0.012);
+  return s;
+}
+
+// 溫度 → 顏色（x 約 1 為偏白的金色，小於 0.5 偏紅、大於 1.4 偏藍白）
+fn ramp(x: f32) -> vec3f {
+  var c = mix(vec3f(0.55, 0.08, 0.02), vec3f(1.0, 0.38, 0.1), smoothstep(0.2, 0.5, x));
+  c = mix(c, vec3f(1.0, 0.72, 0.38), smoothstep(0.5, 0.8, x));
+  c = mix(c, vec3f(1.0, 0.92, 0.8), smoothstep(0.8, 1.1, x));
+  c = mix(c, vec3f(0.78, 0.86, 1.0), smoothstep(1.1, 1.8, x));
+  return c;
+}
+
+// 光線在 Schwarzschild 時空的加速度（rs = 1）：a = -1.5 h² x / r⁵，h² = |x × v|² 是守恆量
+fn accel(p: vec3f, h2: f32) -> vec3f {
+  let r2 = dot(p, p);
+  return p * (-1.5 * h2 / (r2 * r2 * sqrt(r2)));
+}
+
+// 吸積盤上一點 q，被看見的那條光線方向為 vd。回傳 rgb 與不透明度。
+fn disk(q: vec3f, vd: vec3f) -> vec4f {
+  let rr = length(q.xz);
+  let rout = u.b.z;
+  let t = u.a.w;
+
+  // 差速轉動的雲氣紋理（內圈轉得比外圈快）
+  let omega = 0.707 * pow(rr, -1.5);
+  let ang = atan2(q.z, q.x) - omega * t;
+  let ca = cos(ang);
+  let sa = sin(ang);
+  let n1 = fbm(vec3f(rr * 1.9, ca * 1.7, sa * 1.7));
+  let n2 = vnoise(vec3f(rr * 9.0, ca * 5.0, sa * 5.0));
+  let n3 = vnoise(vec3f(rr * 26.0, ca * 11.0, sa * 11.0));
+  var dens = (0.22 + 1.15 * n1) * (0.55 + 0.75 * n2) * (0.75 + 0.5 * n3);
+  dens *= smoothstep(RIN, RIN + 0.35, rr) * (1.0 - smoothstep(rout * 0.55, rout, rr));
+
+  // 克卜勒轉速（靜止觀察者量到的速度）、都卜勒與重力紅移
+  let beta = sqrt(0.5 / (rr - 1.0));
+  let gam = inverseSqrt(1.0 - beta * beta);
+  let tdir = normalize(vec3f(-q.z, 0.0, q.x));
+  let bn = -beta * dot(tdir, vd);              // β·n，光子實際前進方向 n = -vd
+  let g = sqrt(1.0 - 1.0 / rr) / (gam * (1.0 - bn));
+  let x = 1.2 * pow(RIN / rr, 0.75) * pow(g, u.b.x);
+
+  let emit = ramp(x) * (pow(x, 2.6) * 1.5 * u.b.y);
+  return vec4f(emit, clamp(dens * 0.9, 0.0, 0.97));
+}
+
+@fragment
+fn fs(@builtin(position) fc: vec4f) -> @location(0) vec4f {
+  let res = u.a.xy;
+  let uv = fc.xy / res;
+  let ndc = vec2f(uv.x * 2.0 - 1.0, 1.0 - uv.y * 2.0);
+  let tn = u.a.z;
+  var v = normalize(u.fwd.xyz + u.right.xyz * (ndc.x * tn * res.x / res.y) + u.up.xyz * (ndc.y * tn));
+  var p = u.eye.xyz;
+
+  let L = cross(p, v);
+  let h2 = dot(L, L);
+  let rf = max(1.6 * length(p), 40.0);
+
+  var col = vec3f(0.0);
+  var trans = 1.0;
+  var absorbed = false;
+  var prev = p;
+  var acc = accel(p, h2);
+
+  for (var i = 0; i < MAXSTEPS; i++) {
+    let r = length(p);
+    if (r < 1.0) { absorbed = true; break; }
+    if (r > rf && dot(p, v) > 0.0) { break; }
+    let dt = clamp(0.045 * r, 0.02, 3.0);
+
+    // leapfrog 積分一步
+    v += acc * (0.5 * dt);
+    prev = p;
+    p += v * dt;
+    acc = accel(p, h2);
+    v += acc * (0.5 * dt);
+
+    // 穿過赤道面？
+    if (prev.y * p.y < 0.0) {
+      let q = mix(prev, p, prev.y / (prev.y - p.y));
+      let rr = length(q.xz);
+      if (rr > RIN && rr < u.b.z) {
+        let dk = disk(q, normalize(v));
+        col += dk.rgb * (dk.a * trans);
+        trans *= 1.0 - dk.a;
+        if (trans < 0.015) { break; }
+      }
+    }
+  }
+
+  if (!absorbed && trans > 0.01) {
+    let pa = 2.0 * tn / res.y;
+    col += sky(normalize(v), pa) * trans;
+  }
+  return vec4f(col, 1.0);
+}`;
+
+const DOWN_WGSL = FULLSCREEN_VS + /* wgsl */`
+@group(0) @binding(0) var src: texture_2d<f32>;
+@group(0) @binding(1) var smp: sampler;
+
+@fragment
+fn fs(@builtin(position) fc: vec4f) -> @location(0) vec4f {
+  let sd = vec2f(textureDimensions(src));
+  let dd = max(floor(sd * 0.5), vec2f(1.0));
+  let uv = fc.xy / dd;
+  let ts = 1.0 / sd;
+  var c = textureSampleLevel(src, smp, uv + vec2f(-ts.x, -ts.y), 0.0).rgb;
+  c += textureSampleLevel(src, smp, uv + vec2f( ts.x, -ts.y), 0.0).rgb;
+  c += textureSampleLevel(src, smp, uv + vec2f(-ts.x,  ts.y), 0.0).rgb;
+  c += textureSampleLevel(src, smp, uv + vec2f( ts.x,  ts.y), 0.0).rgb;
+  return vec4f(c * 0.25, 1.0);
+}`;
+
+const COMPOSITE_WGSL = FULLSCREEN_VS + /* wgsl */`
+struct Comp { a: vec4f, p: vec4f };   // a = (畫面寬, 畫面高, 時間, 0)  p = (曝光, 光暈, 0, 0)
+@group(0) @binding(0) var hdr: texture_2d<f32>;
+@group(0) @binding(1) var smp: sampler;
+@group(0) @binding(2) var<uniform> u: Comp;
+
+fn h1(p: vec3f) -> f32 { return fract(sin(dot(p, vec3f(12.9898, 78.233, 37.719))) * 43758.5453); }
+
+@fragment
+fn fs(@builtin(position) fc: vec4f) -> @location(0) vec4f {
+  let res = u.a.xy;
+  let uv = fc.xy / res;
+  let off = (uv - 0.5) * 0.0022;                      // 極輕微的鏡頭色散
+  var c = vec3f(textureSampleLevel(hdr, smp, uv + off, 0.0).r,
+                textureSampleLevel(hdr, smp, uv, 0.0).g,
+                textureSampleLevel(hdr, smp, uv - off, 0.0).b);
+  let bl = textureSampleLevel(hdr, smp, uv, 2.0).rgb * 0.30
+         + textureSampleLevel(hdr, smp, uv, 3.0).rgb * 0.24
+         + textureSampleLevel(hdr, smp, uv, 4.0).rgb * 0.18
+         + textureSampleLevel(hdr, smp, uv, 5.0).rgb * 0.12;
+  var col = (c + bl * u.p.y) * u.p.x;
+  col = vec3f(1.0) - exp(-col);
+  col = pow(col, vec3f(1.0 / 2.2));
+  let q = uv * 2.0 - 1.0;
+  col *= 1.0 - 0.3 * dot(q, q) * 0.5;
+  col += (h1(vec3f(fc.xy, u.a.z)) - 0.5) / 160.0;      // 細微底片顆粒（同時消除色帶）
+  return vec4f(col, 1.0);
+}`;
+
+// ───────────────────────── 小工具 ─────────────────────────
+const $ = (id) => document.getElementById(id);
+const canvas = $('c');
+function fail(html) { $('msg').innerHTML = '<div>' + html + '</div>'; $('msg').classList.add('show'); $('ui').classList.add('hidden'); }
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const norm3 = (v) => { const l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; };
+const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+
+const VIEWS = {
+  cine:  { pitch: 0.13, dist: 32 },
+  top:   { pitch: 1.2,  dist: 30 },
+  edge:  { pitch: 0.0,  dist: 32 },
+  close: { pitch: 0.08, dist: 9 },
+};
+
+async function main() {
+  if (!navigator.gpu) {
+    return fail('這個瀏覽器不支援 WebGPU。<br>請用較新的 <code>Chrome</code> / <code>Edge</code>（113 以上）或 <code>Safari 26</code>，並確認是透過 https 或 localhost 開啟。');
+  }
+  const adapter = await navigator.gpu.requestAdapter();
+  if (!adapter) return fail('找不到可用的 GPU 介面卡（WebGPU adapter）。');
+  const device = await adapter.requestDevice();
+  const gpuName = adapter.info?.description || adapter.info?.device || adapter.info?.vendor || 'GPU';
+  device.lost.then((i) => fail('GPU 裝置遺失：' + i.message + '<br>重新整理頁面試試。'));
+  let errShown = false;
+  device.addEventListener('uncapturederror', (e) => {
+    console.error(e.error.message);
+    if (!errShown) { errShown = true; fail('WebGPU 錯誤：<br><code>' + String(e.error.message).replace(/</g, '&lt;').slice(0, 500) + '</code>'); }
+  });
+
+  const ctx = canvas.getContext('webgpu');
+  const format = navigator.gpu.getPreferredCanvasFormat();
+  ctx.configure({ device, format, alphaMode: 'opaque' });
+  const HDR = 'rgba16float';
+  const sampler = device.createSampler({ magFilter: 'linear', minFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge' });
+
+  const mk = (code, fmt) => {
+    const m = device.createShaderModule({ code });
+    return device.createRenderPipeline({ layout: 'auto', vertex: { module: m, entryPoint: 'vs' }, fragment: { module: m, entryPoint: 'fs', targets: [{ format: fmt }] } });
+  };
+  const tracePipe = mk(TRACE_WGSL, HDR);
+  const downPipe = mk(DOWN_WGSL, HDR);
+  const compPipe = mk(COMPOSITE_WGSL, format);
+
+  const traceUBO = device.createBuffer({ size: 96, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const compUBO = device.createBuffer({ size: 32, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const traceBG = device.createBindGroup({ layout: tracePipe.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: traceUBO } }] });
+
+  // ── UI ──
+  const state = { mode: 0, gain: 1, speed: 1, bloom: 1, quality: 'auto', auto: false, paused: false };
+  const modeBtns = [...document.querySelectorAll('#modes button')];
+  const setMode = (m) => { state.mode = m; modeBtns.forEach((b) => b.classList.toggle('on', +b.dataset.m === m)); };
+  modeBtns.forEach((b) => b.addEventListener('click', () => setMode(+b.dataset.m)));
+  setMode(0);
+  for (const id of ['gain', 'speed', 'bloom']) {
+    const el = $(id), out = el.parentElement.querySelector('output');
+    const upd = () => { state[id] = +el.value; out.textContent = el.value; };
+    el.addEventListener('input', upd); upd();
+  }
+  $('quality').addEventListener('change', (e) => { state.quality = e.target.value; });
+  $('auto').addEventListener('change', (e) => { state.auto = e.target.checked; });
+  const pauseBtn = $('pause');
+  const togglePause = () => { state.paused = !state.paused; pauseBtn.textContent = state.paused ? '繼續' : '暫停'; pauseBtn.classList.toggle('on', state.paused); };
+  pauseBtn.addEventListener('click', togglePause);
+  const toggleUI = () => $('ui').classList.toggle('hidden');
+  $('toggle').addEventListener('click', toggleUI);
+
+  const cam = { yaw: 0.5, pitch: 0.13, dist: 32, dir: 1 };
+  const setView = (k) => { const v = VIEWS[k]; if (v) { cam.pitch = v.pitch; cam.dist = v.dist; } };
+  document.querySelectorAll('#views button').forEach((b) => b.addEventListener('click', () => setView(b.dataset.v)));
+  addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'SELECT') return;
+    if (e.key === ' ') { e.preventDefault(); togglePause(); }
+    else if (e.key === 'h' || e.key === 'H') toggleUI();
+    else if (e.key === 'm' || e.key === 'M') setMode(1 - state.mode);
+    else if (/^[1-4]$/.test(e.key)) setView(Object.keys(VIEWS)[+e.key - 1]);
+  });
+
+  const ptrs = new Map(); let pinch = 0, lastTouch = 0;
+  canvas.addEventListener('pointerdown', (e) => { canvas.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, [e.clientX, e.clientY]); lastTouch = performance.now(); });
+  canvas.addEventListener('pointermove', (e) => {
+    const prev = ptrs.get(e.pointerId); if (!prev) return;
+    const cur = [e.clientX, e.clientY];
+    if (ptrs.size === 1) {
+      cam.yaw -= (cur[0] - prev[0]) * 0.005;
+      cam.pitch = clamp(cam.pitch + (cur[1] - prev[1]) * 0.004, -1.45, 1.45);
+    }
+    ptrs.set(e.pointerId, cur);
+    if (ptrs.size === 2) {
+      const [a, b] = [...ptrs.values()]; const d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      if (pinch) cam.dist = clamp(cam.dist * pinch / d, 4, 120);
+      pinch = d;
+    }
+    lastTouch = performance.now();
+  });
+  const up = (e) => { ptrs.delete(e.pointerId); pinch = 0; };
+  canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+  canvas.addEventListener('wheel', (e) => { e.preventDefault(); cam.dist = clamp(cam.dist * Math.exp(e.deltaY * 0.0011), 4, 120); lastTouch = performance.now(); }, { passive: false });
+
+  // ── 隨大小／畫質重建的資源 ──
+  let W = 0, H = 0, HW = 0, HH = 0, hdrTex = null, mipViews = [], downBGs = [], compBG = null;
+  let autoQ = 0.6, emaDt = 16, qTimer = 0;
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const w = Math.max(64, Math.round(canvas.clientWidth * dpr)), h = Math.max(64, Math.round(canvas.clientHeight * dpr));
+    const q = state.quality === 'auto' ? autoQ : +state.quality;
+    const hw = Math.max(64, Math.round(w * q)), hh = Math.max(64, Math.round(h * q));
+    if (w === W && h === H && hw === HW && hh === HH) return;
+    W = w; H = h; HW = hw; HH = hh; canvas.width = w; canvas.height = h;
+    hdrTex?.destroy();
+    const mips = Math.min(6, Math.floor(Math.log2(Math.max(hw, hh))) + 1);
+    hdrTex = device.createTexture({ size: [hw, hh], format: HDR, mipLevelCount: mips, usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING });
+    mipViews = Array.from({ length: mips }, (_, i) => hdrTex.createView({ baseMipLevel: i, mipLevelCount: 1 }));
+    downBGs = mipViews.slice(0, -1).map((v) => device.createBindGroup({ layout: downPipe.getBindGroupLayout(0), entries: [{ binding: 0, resource: v }, { binding: 1, resource: sampler }] }));
+    compBG = device.createBindGroup({ layout: compPipe.getBindGroupLayout(0), entries: [{ binding: 0, resource: hdrTex.createView() }, { binding: 1, resource: sampler }, { binding: 2, resource: { buffer: compUBO } }] });
+  }
+
+  // ── 每一幀 ──
+  const TAN = Math.tan(50 * Math.PI / 360);
+  let last = performance.now(), statT = 0, diskT = 0;
+  function frame(now) {
+    requestAnimationFrame(frame);
+    const dtReal = Math.min(100, now - last); last = now;
+    emaDt += (dtReal - emaDt) * 0.06;
+    if (state.quality === 'auto' && now - qTimer > 1200) {
+      qTimer = now;
+      if (emaDt > 28 && autoQ > 0.36) autoQ = Math.max(0.35, Math.round(autoQ * 0.85 * 20) / 20);
+      else if (emaDt < 17.8 && autoQ < 1) autoQ = Math.min(1, Math.round(autoQ * 1.12 * 20) / 20);
+    }
+    resize();
+    if (!state.paused) diskT += dtReal * 0.001 * 6 * state.speed;
+    if (state.auto && ptrs.size === 0 && now - lastTouch > 2500) {
+      cam.pitch += 0.0012 * cam.dir;
+      if (cam.pitch > 0.75) cam.dir = -1; else if (cam.pitch < 0.03) cam.dir = 1;
+    }
+
+    const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+    const eye = [cam.dist * cp * Math.sin(cam.yaw), cam.dist * sp, cam.dist * cp * Math.cos(cam.yaw)];
+    const fwd = norm3([-eye[0], -eye[1], -eye[2]]);
+    const right = norm3(cross3(fwd, [0, 1, 0]));
+    const upv = cross3(right, fwd);
+    device.queue.writeBuffer(traceUBO, 0, new Float32Array([
+      ...eye, 0, ...right, 0, ...upv, 0, ...fwd, 0,
+      HW, HH, TAN, diskT,
+      state.mode, state.gain, 15, 0,
+    ]));
+    device.queue.writeBuffer(compUBO, 0, new Float32Array([W, H, now * 0.001, 0, 1.0, state.bloom, 0, 0]));
+
+    const enc = device.createCommandEncoder();
+    const pass = (view, pipe, bg, clear) => {
+      const p = enc.beginRenderPass({ colorAttachments: [{ view, clearValue: [0, 0, 0, 1], loadOp: 'clear', storeOp: 'store' }] });
+      p.setPipeline(pipe); p.setBindGroup(0, bg); p.draw(3); p.end();
+    };
+    pass(mipViews[0], tracePipe, traceBG);
+    for (let i = 0; i < downBGs.length; i++) pass(mipViews[i + 1], downPipe, downBGs[i]);
+    pass(ctx.getCurrentTexture().createView(), compPipe, compBG);
+    device.queue.submit([enc.finish()]);
+
+    if (now - statT > 400) {
+      statT = now;
+      $('stat').textContent = `${(1000 / Math.max(emaDt, 0.1)).toFixed(0)} FPS · 光線解析度 ${HW}×${HH} · ${gpuName}`;
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+main().catch((e) => { console.error(e); fail('初始化失敗：<br><code>' + String(e.message || e).replace(/</g, '&lt;') + '</code>'); });
+</script>
+</body>
+</html>

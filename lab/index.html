@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>實驗室</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; background: #05070d; color: #cfd8ea; font-family: system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif; display: grid; place-items: center; }
+  main { width: min(520px, calc(100vw - 32px)); }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; }
+  p.sub { margin: 0 0 24px; color: #6b7a9c; font-size: 14px; }
+  a.card { display: block; padding: 14px 16px; margin-bottom: 10px; border: 1px solid rgba(160,190,255,.18); border-radius: 12px; color: inherit; text-decoration: none; background: rgba(120,150,255,.06); }
+  a.card:hover { background: rgba(120,150,255,.14); }
+  a.card b { display: block; color: #eaf0ff; margin-bottom: 2px; }
+  a.card span { font-size: 13px; color: #8fa0c4; }
+</style>
+</head>
+<body>
+<main>
+  <h1>實驗室</h1>
+  <p class="sub">純靜態頁面能玩到什麼程度。不經過 build-site，每個實驗各自獨立。</p>
+  <a class="card" href="kerr/"><b>WebGPU 克爾（自轉）黑洞</b><span>卡岡圖雅的真正做法：Kerr-Schild 座標 Hamiltonian 積分，自旋可調，陰影會被壓扁偏移</span></a>
+  <a class="card" href="blackhole/"><b>WebGPU 黑洞</b><span>卡岡圖雅風：逐像素沿彎曲時空積分光線，吸積盤彎過黑洞上下、愛因斯坦環、都卜勒不對稱</span></a>
+  <a class="card" href="universe/"><b>WebGPU 宇宙</b><span>GPU compute shader 即時模擬數百萬顆星的星系碰撞、螺旋星系、黑洞吸積盤</span></a>
+</main>
+</body>
+</html>
