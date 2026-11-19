@@ -1,0 +1,923 @@
+{
+  "id": "1201",
+  "title": "2026/12/01",
+  "scope": "第二次段考模擬：單字書 U21～23＋第三、四課（單字・片語・文法）",
+  "questionCount": 83,
+  "shuffleOptions": false,
+  "questions": [
+    {
+      "id": 1,
+      "category": "單字",
+      "sentence": "Through teamwork, the students ___ excellent results in the science fair.",
+      "options": [
+        "admitted",
+        "attended",
+        "achieved",
+        "avoided"
+      ]
+    },
+    {
+      "id": 2,
+      "category": "單字",
+      "sentence": "This tea comes in many ___, such as lemon, peach, and mint.",
+      "options": [
+        "flowers",
+        "flavors",
+        "favors",
+        "floors"
+      ]
+    },
+    {
+      "id": 3,
+      "category": "單字",
+      "sentence": "Eating and drinking are not ___ in the library.",
+      "options": [
+        "prepared",
+        "promised",
+        "prevented",
+        "permitted"
+      ]
+    },
+    {
+      "id": 4,
+      "category": "單字",
+      "sentence": "___ the rain, thousands of fans waited outside the stadium.",
+      "options": [
+        "In spite of",
+        "Instead of",
+        "In case of",
+        "Because of"
+      ]
+    },
+    {
+      "id": 5,
+      "category": "單字",
+      "sentence": "The company has a ___ position for a graphic designer.",
+      "options": [
+        "variable",
+        "valid",
+        "various",
+        "vacant"
+      ]
+    },
+    {
+      "id": 6,
+      "category": "單字",
+      "sentence": "Volunteers brought food and blankets to the ___ of the earthquake.",
+      "options": [
+        "victims",
+        "voters",
+        "villagers",
+        "vehicles"
+      ]
+    },
+    {
+      "id": 7,
+      "category": "單字",
+      "sentence": "The weather is expected to ___ over the weekend, so we'd better cancel the trip.",
+      "options": [
+        "wander",
+        "worsen",
+        "waste",
+        "weigh"
+      ]
+    },
+    {
+      "id": 8,
+      "category": "單字",
+      "sentence": "According to the ___ of an eyewitness, the thief ran away on a motorcycle.",
+      "options": [
+        "accent",
+        "accountant",
+        "account",
+        "accident"
+      ]
+    },
+    {
+      "id": 9,
+      "category": "單字",
+      "sentence": "Recent ___ in computer science have changed the way we work.",
+      "options": [
+        "advantages",
+        "advances",
+        "adventures",
+        "advices"
+      ]
+    },
+    {
+      "id": 10,
+      "category": "單字",
+      "sentence": "The lamp ___ a soft light over the desk.",
+      "options": [
+        "cast",
+        "cost",
+        "cash",
+        "cause"
+      ]
+    },
+    {
+      "id": 11,
+      "category": "單字",
+      "sentence": "The new players are ___ to learn from the coach.",
+      "options": [
+        "early",
+        "empty",
+        "eager",
+        "equal"
+      ]
+    },
+    {
+      "id": 12,
+      "category": "單字",
+      "sentence": "Heavy rain caused a serious ___ in the south of the country.",
+      "options": [
+        "fluid",
+        "flight",
+        "flour",
+        "flood"
+      ]
+    },
+    {
+      "id": 13,
+      "category": "單字",
+      "sentence": "Tom has two sons, a doctor and a teacher. The ___ works in Taipei, and the latter lives in Tainan.",
+      "options": [
+        "formal",
+        "former",
+        "foreign",
+        "forward"
+      ]
+    },
+    {
+      "id": 14,
+      "category": "單字",
+      "sentence": "Earthquakes occur very ___ in Japan, so people there know how to protect themselves.",
+      "options": [
+        "hardly",
+        "nearly",
+        "frequently",
+        "rarely"
+      ]
+    },
+    {
+      "id": 15,
+      "category": "單字",
+      "sentence": "Closing the windows will ___ the rain from coming into the room.",
+      "options": [
+        "prevent",
+        "permit",
+        "promote",
+        "provide"
+      ]
+    },
+    {
+      "id": 16,
+      "category": "單字",
+      "sentence": "Scientists are trying to ___ the source of the virus.",
+      "options": [
+        "trade",
+        "trap",
+        "treat",
+        "trace"
+      ]
+    },
+    {
+      "id": 17,
+      "category": "單字",
+      "sentence": "A: Did you like the food? B: ___, I thought it was too salty.",
+      "options": [
+        "Exactly",
+        "Finally",
+        "Actually",
+        "Naturally"
+      ]
+    },
+    {
+      "id": 18,
+      "category": "單字",
+      "sentence": "Your daily habits ___ how healthy you will be in the future.",
+      "options": [
+        "deliver",
+        "dedicate",
+        "decorate",
+        "determine"
+      ]
+    },
+    {
+      "id": 19,
+      "category": "單字",
+      "sentence": "My brother and I are complete ___; he loves parties, but I prefer staying home.",
+      "options": [
+        "oppositions",
+        "opposites",
+        "opponents",
+        "opinions"
+      ]
+    },
+    {
+      "id": 20,
+      "category": "單字",
+      "sentence": "A narrow ___ between the two buildings leads to the back garden.",
+      "options": [
+        "passage",
+        "package",
+        "passenger",
+        "passport"
+      ]
+    },
+    {
+      "id": 21,
+      "category": "單字",
+      "sentence": "The hotel rooms are ___ cleaned every morning before the guests wake up.",
+      "options": [
+        "routinely",
+        "rarely",
+        "roughly",
+        "recently"
+      ]
+    },
+    {
+      "id": 22,
+      "category": "單字",
+      "sentence": "His shirt was wet with ___ after the basketball game.",
+      "options": [
+        "sweet",
+        "sweat",
+        "sweater",
+        "sweep"
+      ]
+    },
+    {
+      "id": 23,
+      "category": "單字",
+      "sentence": "It is perfectly ___ to feel nervous before a big performance.",
+      "options": [
+        "mental",
+        "final",
+        "formal",
+        "normal"
+      ]
+    },
+    {
+      "id": 24,
+      "category": "單字",
+      "sentence": "You can buy kitchen tools on the third floor of the ___ store.",
+      "options": [
+        "compartment",
+        "apartment",
+        "department",
+        "government"
+      ]
+    },
+    {
+      "id": 25,
+      "category": "單字",
+      "sentence": "The lake ___ the mountains like a giant mirror.",
+      "options": [
+        "relaxes",
+        "replies",
+        "reflects",
+        "refuses"
+      ]
+    },
+    {
+      "id": 26,
+      "category": "單字",
+      "sentence": "Everyone should have an equal chance to learn, regardless of age or ___.",
+      "options": [
+        "generation",
+        "genius",
+        "general",
+        "gender"
+      ]
+    },
+    {
+      "id": 27,
+      "category": "單字",
+      "sentence": "The river ___ the city into two parts.",
+      "options": [
+        "separates",
+        "combines",
+        "connects",
+        "joins"
+      ]
+    },
+    {
+      "id": 28,
+      "category": "單字",
+      "sentence": "The bookstore has put the new bestseller on ___ in the window.",
+      "options": [
+        "dispute",
+        "display",
+        "distance",
+        "disease"
+      ]
+    },
+    {
+      "id": 29,
+      "category": "單字",
+      "sentence": "This area has great ___ for tourism because of its beautiful coastline.",
+      "options": [
+        "potential",
+        "poverty",
+        "population",
+        "pollution"
+      ]
+    },
+    {
+      "id": 30,
+      "category": "單字",
+      "sentence": "Boxing is a ___ sport that needs both strength and speed.",
+      "options": [
+        "musical",
+        "physical",
+        "political",
+        "logical"
+      ]
+    },
+    {
+      "id": 31,
+      "category": "單字",
+      "sentence": "There is a speed ___ of 50 kilometers per hour on this street.",
+      "options": [
+        "link",
+        "lack",
+        "limit",
+        "label"
+      ]
+    },
+    {
+      "id": 32,
+      "category": "單字",
+      "sentence": "The new rule had no ___ on the number of accidents.",
+      "options": [
+        "effort",
+        "excuse",
+        "expert",
+        "effect"
+      ]
+    },
+    {
+      "id": 33,
+      "category": "單字",
+      "sentence": "The mayor hopes to ___ tourism by building a new park by the river.",
+      "options": [
+        "provide",
+        "produce",
+        "promote",
+        "prevent"
+      ]
+    },
+    {
+      "id": 34,
+      "category": "單字",
+      "sentence": "Sam refused to ___ that he had lied to his parents.",
+      "options": [
+        "submit",
+        "admit",
+        "commit",
+        "permit"
+      ]
+    },
+    {
+      "id": 35,
+      "category": "單字",
+      "sentence": "The leather in this bag is ___, not fake; you can tell by the smell.",
+      "options": [
+        "authentic",
+        "ancient",
+        "average",
+        "automatic"
+      ]
+    },
+    {
+      "id": 36,
+      "category": "單字",
+      "sentence": "In ___ for your help, I will treat you to dinner.",
+      "options": [
+        "example",
+        "excuse",
+        "exercise",
+        "exchange"
+      ]
+    },
+    {
+      "id": 37,
+      "category": "單字",
+      "sentence": "The report ___ the need for more teachers in rural areas.",
+      "options": [
+        "hides",
+        "hurts",
+        "highlights",
+        "hangs"
+      ]
+    },
+    {
+      "id": 38,
+      "category": "單字",
+      "sentence": "Her ___ laugh makes everyone around her feel happy.",
+      "options": [
+        "careful",
+        "harmful",
+        "useful",
+        "cheerful"
+      ]
+    },
+    {
+      "id": 39,
+      "category": "單字",
+      "sentence": "Please write your name, age, and ___ on the form.",
+      "options": [
+        "occupation",
+        "occasion",
+        "operation",
+        "organization"
+      ]
+    },
+    {
+      "id": 40,
+      "category": "單字",
+      "sentence": "A bus is a ___ that carries many passengers at the same time.",
+      "options": [
+        "valley",
+        "vehicle",
+        "vacation",
+        "vessel"
+      ]
+    },
+    {
+      "id": 41,
+      "category": "單字",
+      "sentence": "Drivers must stop and let ___ cross at the crosswalk.",
+      "options": [
+        "politicians",
+        "pedestrians",
+        "presidents",
+        "performers"
+      ]
+    },
+    {
+      "id": 42,
+      "category": "單字",
+      "sentence": "Kids are naturally ___ about the world around them.",
+      "options": [
+        "serious",
+        "furious",
+        "anxious",
+        "curious"
+      ]
+    },
+    {
+      "id": 43,
+      "category": "單字",
+      "sentence": "The custom of giving red envelopes ___ in ancient China.",
+      "options": [
+        "originated",
+        "occupied",
+        "obtained",
+        "operated"
+      ]
+    },
+    {
+      "id": 44,
+      "category": "單字",
+      "sentence": "We should look at the problem from every ___ before making a decision.",
+      "options": [
+        "accent",
+        "asset",
+        "aspect",
+        "access"
+      ]
+    },
+    {
+      "id": 45,
+      "category": "單字",
+      "sentence": "Dark clouds began to ___ in the sky before the storm.",
+      "options": [
+        "garden",
+        "gather",
+        "gamble",
+        "gaze"
+      ]
+    },
+    {
+      "id": 46,
+      "category": "單字",
+      "sentence": "Despite the heavy rain, the audience ___ in their seats until the end of the show.",
+      "options": [
+        "replaced",
+        "reminded",
+        "remained",
+        "removed"
+      ]
+    },
+    {
+      "id": 47,
+      "category": "片語",
+      "sentence": "Our decision will be ___ the results of the survey.",
+      "options": [
+        "bases on",
+        "basing on",
+        "based in",
+        "based on"
+      ]
+    },
+    {
+      "id": 48,
+      "category": "片語",
+      "sentence": "Everyone ___ the manager's suggestion, so the meeting ended quickly.",
+      "options": [
+        "went along with",
+        "came up with",
+        "got along with",
+        "kept up with"
+      ]
+    },
+    {
+      "id": 49,
+      "category": "片語",
+      "sentence": "I'm not angry at you. ___, you didn't do it on purpose.",
+      "options": [
+        "Above all",
+        "After all",
+        "In all",
+        "At all"
+      ]
+    },
+    {
+      "id": 50,
+      "category": "片語",
+      "sentence": "I don't ___ what others think of me; I just live my own life.",
+      "options": [
+        "care about",
+        "care in",
+        "care for",
+        "care of"
+      ]
+    },
+    {
+      "id": 51,
+      "category": "片語",
+      "sentence": "After failing in business, he decided to move abroad and ___.",
+      "options": [
+        "make a phone call",
+        "make a speech",
+        "make a fresh start",
+        "make friends"
+      ]
+    },
+    {
+      "id": 52,
+      "category": "片語",
+      "sentence": "The government wants to ___ the illegal fishing in this area.",
+      "options": [
+        "put up with",
+        "put off",
+        "put on",
+        "put an end to"
+      ]
+    },
+    {
+      "id": 53,
+      "category": "片語",
+      "sentence": "The team has improved a lot, but it still ___ before it can win the championship.",
+      "options": [
+        "has no way to go",
+        "has gone away",
+        "goes a long way",
+        "has a long way to go"
+      ]
+    },
+    {
+      "id": 54,
+      "category": "片語",
+      "sentence": "More than two hundred students will ___ the English speech contest.",
+      "options": [
+        "take off",
+        "take place in",
+        "take part in",
+        "take care of"
+      ]
+    },
+    {
+      "id": 55,
+      "category": "片語",
+      "sentence": "Traveling alone for a month really ___ to how big the world is.",
+      "options": [
+        "opened my eyes",
+        "closed my eyes",
+        "raised my eyes",
+        "shut my eyes"
+      ]
+    },
+    {
+      "id": 56,
+      "category": "片語",
+      "sentence": "The wedding will ___ in a small church by the sea.",
+      "options": [
+        "take off",
+        "take place",
+        "take part",
+        "take over"
+      ]
+    },
+    {
+      "id": 57,
+      "category": "片語",
+      "sentence": "They ___ a tent beside the lake before it got dark.",
+      "options": [
+        "put away",
+        "put out",
+        "put up",
+        "put off"
+      ]
+    },
+    {
+      "id": 58,
+      "category": "片語",
+      "sentence": "How did this misunderstanding ___?",
+      "options": [
+        "come in",
+        "come true",
+        "come across",
+        "come about"
+      ]
+    },
+    {
+      "id": 59,
+      "category": "片語",
+      "sentence": "Volunteers will ___ free flyers outside the station.",
+      "options": [
+        "hand over",
+        "hand out",
+        "hand down",
+        "hand in"
+      ]
+    },
+    {
+      "id": 60,
+      "category": "文法",
+      "sentence": "Behind the house ___ a large garden.",
+      "options": [
+        "lies",
+        "lie",
+        "lays",
+        "lying"
+      ]
+    },
+    {
+      "id": 61,
+      "category": "文法",
+      "sentence": "On the shelf ___ many old photo albums.",
+      "options": [
+        "to sit",
+        "sitting",
+        "sit",
+        "sits"
+      ]
+    },
+    {
+      "id": 62,
+      "category": "文法",
+      "sentence": "Out of the box ___ a tiny kitten.",
+      "options": [
+        "jumping",
+        "jump",
+        "to jump",
+        "jumped"
+      ]
+    },
+    {
+      "id": 63,
+      "category": "文法",
+      "sentence": "Here ___ the bus, so hurry up!",
+      "options": [
+        "comes",
+        "to come",
+        "coming",
+        "come"
+      ]
+    },
+    {
+      "id": 64,
+      "category": "文法",
+      "sentence": "Away ___, laughing loudly.",
+      "options": [
+        "did they run",
+        "they ran",
+        "ran they",
+        "they did run"
+      ]
+    },
+    {
+      "id": 65,
+      "category": "文法",
+      "sentence": "Next to the bakery ___ two small flower shops.",
+      "options": [
+        "stands",
+        "is stand",
+        "standing",
+        "stand"
+      ]
+    },
+    {
+      "id": 66,
+      "category": "文法",
+      "sentence": "My cousin, ___ is a nurse, works at a hospital in Taichung.",
+      "options": [
+        "who",
+        "whose",
+        "whom",
+        "which"
+      ]
+    },
+    {
+      "id": 67,
+      "category": "文法",
+      "sentence": "The Lantern Festival, ___ falls on January 15th of the lunar calendar, is celebrated across Taiwan.",
+      "options": [
+        "what",
+        "which",
+        "that",
+        "who"
+      ]
+    },
+    {
+      "id": 68,
+      "category": "文法",
+      "sentence": "Mr. Hsu, ___ I have known since childhood, is moving to Canada.",
+      "options": [
+        "where",
+        "whose",
+        "whom",
+        "which"
+      ]
+    },
+    {
+      "id": 69,
+      "category": "文法",
+      "sentence": "Taipei 101, ___ height is 508 meters, was once the tallest building in the world.",
+      "options": [
+        "whose",
+        "who",
+        "which",
+        "that"
+      ]
+    },
+    {
+      "id": 70,
+      "category": "文法",
+      "sentence": "Sophie, with ___ I shared a room in college, is now a famous writer.",
+      "options": [
+        "whose",
+        "whom",
+        "which",
+        "who"
+      ]
+    },
+    {
+      "id": 71,
+      "category": "文法",
+      "sentence": "The old temple, in ___ we sheltered from the rain, was built two hundred years ago.",
+      "options": [
+        "that",
+        "whom",
+        "where",
+        "which"
+      ]
+    },
+    {
+      "id": 72,
+      "category": "文法",
+      "sentence": "I noticed a stranger ___ at our house from across the street.",
+      "options": [
+        "to look",
+        "looked",
+        "looking",
+        "looks"
+      ]
+    },
+    {
+      "id": 73,
+      "category": "文法",
+      "sentence": "We watched the plane ___ off and disappear into the clouds.",
+      "options": [
+        "to take",
+        "took",
+        "taking",
+        "take"
+      ]
+    },
+    {
+      "id": 74,
+      "category": "文法",
+      "sentence": "She felt tears ___ down her face, and then she smiled.",
+      "options": [
+        "roll",
+        "rolled",
+        "to roll",
+        "rolls"
+      ]
+    },
+    {
+      "id": 75,
+      "category": "文法",
+      "sentence": "I saw the children ___ across the street while the light was still red.",
+      "options": [
+        "runs",
+        "ran",
+        "run",
+        "to run"
+      ]
+    },
+    {
+      "id": 76,
+      "category": "文法",
+      "sentence": "The teacher heard someone ___ his name outside the room.",
+      "options": [
+        "calls",
+        "call",
+        "called",
+        "to call"
+      ]
+    },
+    {
+      "id": 77,
+      "category": "文法",
+      "sentence": "He felt his phone ___ in his pocket, so he took it out.",
+      "options": [
+        "vibrated",
+        "vibrates",
+        "vibrate",
+        "to vibrate"
+      ]
+    },
+    {
+      "id": 78,
+      "category": "文法",
+      "sentence": "By the time we got to the cinema, the movie ___.",
+      "options": [
+        "had started",
+        "started",
+        "has started",
+        "was starting"
+      ]
+    },
+    {
+      "id": 79,
+      "category": "文法",
+      "sentence": "By the time I woke up, my brother ___ out for school.",
+      "options": [
+        "was leaving",
+        "had left",
+        "leaves",
+        "has left"
+      ]
+    },
+    {
+      "id": 80,
+      "category": "文法",
+      "sentence": "Nobody knew where Kate ___ before she moved here.",
+      "options": [
+        "lives",
+        "is living",
+        "has lived",
+        "had lived"
+      ]
+    },
+    {
+      "id": 81,
+      "category": "文法",
+      "sentence": "After they ___ dinner, they washed the dishes.",
+      "options": [
+        "finish",
+        "have finished",
+        "finishing",
+        "had finished"
+      ]
+    },
+    {
+      "id": 82,
+      "category": "文法",
+      "sentence": "I realized that I ___ my umbrella on the bus when I got home.",
+      "options": [
+        "had left",
+        "was leaving",
+        "have left",
+        "leave"
+      ]
+    },
+    {
+      "id": 83,
+      "category": "文法",
+      "sentence": "The train ___ by the time we reached the platform.",
+      "options": [
+        "already leaves",
+        "had already left",
+        "has already left",
+        "is already leaving"
+      ]
+    }
+  ],
+  "secret": "W3siYW5zd2VyIjoyLCJ6aCI6IumAj+mBjuWcmOmaiuWQiOS9nO+8jOWtuOeUn+WAkeWcqOenkeWxleS4reWPluW+l+S6huWEqueVsOeahOaIkOe4vuOAgiIsIm5vdGUiOiJhY2hpZXZl77yIdnQuIOWujOaIkO+8jOWvpuePvu+8jFNZTiBhY2NvbXBsaXNo77yJ77ybYWNoaWV2ZSByZXN1bHRzIOWPluW+l+aIkOaenOOAgmF0dGVuZO+8iOWHuuW4re+8ieOAgWF2b2lk77yI6YG/5YWN77yJ44CBYWRtaXTvvIjmib/oqo3vvInjgIIifSx7ImFuc3dlciI6MSwiemgiOiLpgJnnqK7ojLbmnInlvojlpJrnqK7lj6PlkbPvvIzkvovlpoLmqrjmqqzjgIHmsLTonJzmoYPlkozoloTojbfjgIIiLCJub3RlIjoiZmxhdm9y77yIbi4gW0NdIOWPo+WRs++8jFNZTiB0YXN0Ze+8ieOAgmZhdm9y77yI5oGp5oOg77yJ44CBZmxvd2Vy77yI6Iqx77yJ44CBZmxvb3LvvIjlnLDmnb/vvInngrrlvaLov5HlrZfjgIIifSx7ImFuc3dlciI6MywiemgiOiLlnJbmm7jppKjlhafkuI3lhYHoqLHpo7Lpo5/jgIIiLCJub3RlIjoicGVybWl077yIdnQuIOWFgeiose+8jFNZTiBhbGxvd++8m3Blcm1pdOKAlHBlcm1pdHRlZOKAlHBlcm1pdHRlZOKAlHBlcm1pdHRpbmfvvInvvJvooqvli5UgYmUgcGVybWl0dGVk44CCcHJldmVudO+8iOmYu+atou+8jOmcgOaOpSBmcm9t77yJ44CBcHJlcGFyZe+8iOa6luWCme+8ieOAgXByb21pc2XvvIjmib/oq77vvInjgIIifSx7ImFuc3dlciI6MCwiemgiOiLlhJjnrqHkuIvpm6jvvIzmlbjljYPlkI3nsonntbLku43lnKjpq5TogrLloLTlpJbnrYnlvoXjgIIiLCJub3RlIjoiaW4gc3BpdGUgb2YgLi4u77yI5YSY566h4oCm4oCm77yMPSBkZXNwaXRl77yJ6KGo6K6T5q2l44CCYmVjYXVzZSBvZu+8iOWboOeCuu+8ieOAgWluc3RlYWQgb2bvvIjogIzkuI3mmK/vvInjgIFpbiBjYXNlIG9m77yI6JCs5LiA77yJ55qG5LiN5ZCI6Kqe5oSP44CCIn0seyJhbnN3ZXIiOjMsInpoIjoi6YCZ5a625YWs5Y+45pyJ5LiA5YCL5bmz6Z2i6Kit6KiI5bir55qE6IG357y644CCIiwibm90ZSI6InZhY2FudO+8iGFkai4g56m655qE77ybKOiBt+S9jSkg56m657y655qE77yM5Ye657y655qE77yJ44CCdmFsaWTvvIjmnInmlYjnmoTvvInjgIF2YXJpb3Vz77yI5ZCE5byP5ZCE5qij55qE77yJ44CBdmFyaWFibGXvvIjmmJPorornmoTvvInngrogdmEtIOmWi+mgreeahOW9ouWuueipnuOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6IuW/l+W3peaKiumjn+eJqeWSjOavm+avr+mAgee1puWcsOmch+eahOWPl+Wus+iAheOAgiIsIm5vdGUiOiJ2aWN0aW3vvIhuLiBbQ10g5Y+X5a6z6ICF77yJ77ybdmljdGltcyBvZiB0aGUgZWFydGhxdWFrZSDlnLDpnIfnmoTlj5flrrPogIXjgIJ2aWxsYWdlcu+8iOadkeawke+8ieOAgXZlaGljbGXvvIjkuqTpgJrlt6XlhbfvvInjgIF2b3Rlcu+8iOaKleelqOS6uu+8ieOAgiJ9LHsiYW5zd2VyIjoxLCJ6aCI6IumgkOioiOmAseacq+Wkqeawo+acg+iuiuW3ru+8jOaJgOS7peaIkeWAkeacgOWlveWPlua2iOmAmei2n+aXheihjOOAgiIsIm5vdGUiOiJ3b3JzZW7vvIh2aS4gKOS9vykg5oOh5YyW77yMU1lOIGdldCB3b3JzZe+8ieOAgndhbmRlcu+8iOmWkuaZg++8ieOAgXdhc3Rl77yI5rWq6LK777yJ44CBd2VpZ2jvvIjnp6Tph43vvInjgIIifSx7ImFuc3dlciI6MiwiemgiOiLmoLnmk5rkuIDlkI3nm67mk4rogIXnmoTmlZjov7DvvIzlsI/lgbfpqI7mqZ/ou4rpgIPotbDkuobjgIIiLCJub3RlIjoiYWNjb3VudO+8iG4uIFtDXSDloLHlsI7vvIzmlZjov7DvvJvluLPmiLbvvInvvJthY2NvcmRpbmcgdG8gdGhlIGFjY291bnQgb2YgLi4uIOagueaTmuKApuKApueahOaPj+i/sOOAgmFjY2VudO+8iOWPo+mfs++8ieOAgWFjY2lkZW5077yI5oSP5aSW77yJ44CBYWNjb3VudGFudO+8iOacg+ioiOW4q++8ieOAgiJ9LHsiYW5zd2VyIjoxLCJ6aCI6Iui/keW5tOmbu+iFpuenkeWtuOeahOmAsuatpeaUueiuiuS6huaIkeWAkeW3peS9nOeahOaWueW8j+OAgiIsIm5vdGUiOiJhZHZhbmNl77yIbi4gW0NdIOmAsuatpe+8jOmAsuWxle+8jFNZTiBwcm9ncmVzc++8m3ZpLiDpgLLmraXvvJvliY3pgLLvvInvvJthZHZhbmNlcyBpbiAuLi4g4oCm4oCm55qE6YCy5q2l44CCYWR2aWNlIOeCuuS4jeWPr+aVuOWQjeipnu+8jOaykuacieikh+aVuO+8m2FkdmFudGFnZe+8iOWEqum7nu+8ieOAgWFkdmVudHVyZe+8iOWGkumaqu+8ieOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6Iuaqr+eHiOWcqOabuOahjOS4iuaKleWwhOWHuuaflOWSjOeahOWFieOAgiIsIm5vdGUiOiJjYXN077yIdnQuIOaKleWwhO+8iOWFieOAgeimlue3muetie+8ie+8jGNhc3TigJRjYXN04oCUY2FzdOKAlGNhc3RpbmfvvIzkuInmhYvlkIzlvaLvvJtuLiBbQ10g5ryU5ZOh6Zmj5a6577yJ44CCY29zdO+8iOiKseiyu++8ieOAgWNhc2jvvIjnj77ph5HvvInjgIFjYXVzZe+8iOmAoOaIkO+8ieeCuuW9oui/keWtl+OAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6IuaWsOeQg+WToeWAkea4tOacm+WQkeaVmee3tOWtuOe/kuOAgiIsIm5vdGUiOiJlYWdlcu+8iGFkai4g54ax5YiH55qE77yMU1lOIGtlZW7vvInvvJtiZSBlYWdlciB0byBW44CCZWFybHnvvIjml6nnmoTvvInjgIFlbXB0ee+8iOepuueahO+8ieOAgWVxdWFs77yI5bmz562J55qE77yJ44CCIn0seyJhbnN3ZXIiOjMsInpoIjoi5aSn6Zuo5Zyo6Kmy5ZyL5Y2X6YOo6YCg5oiQ5Zq06YeN5rC054G944CCIiwibm90ZSI6ImZsb29k77yIbi4gW0NdW1VdIOa0quawtO+8jOawtOeBve+8m3Z0LiAo5rC0KSDmt7nmspLvvInjgIJmbHVpZO+8iOa2sumrlO+8ieOAgWZsb3Vy77yI6bq157KJ77yJ44CBZmxpZ2h077yI54+t5qmf77yJ54K6IGZsLSDplovpoK3nmoTlvaLov5HlrZfjgIIifSx7ImFuc3dlciI6MSwiemgiOiJUb20g5pyJ5YWp5YCL5YWS5a2Q77yM5LiA5YCL5piv6Yar55Sf44CB5LiA5YCL5piv6ICB5bir44CC5YmN6ICF5Zyo5Y+w5YyX5bel5L2c77yM5b6M6ICF5L2P5Zyo5Y+w5Y2X44CCIiwibm90ZSI6ImZvcm1lcu+8iHByb24uIOWJjeiAhe+8m2Fkai4g5Lul5YmN55qE77yMU1lOIHByZXZpb3Vz77yJ77yMQU5UIGxhdHRlcu+8iOW+jOiAhe+8ie+8m3RoZSBmb3JtZXIgLi4uIHRoZSBsYXR0ZXIgLi4uIOWJjeiAheKApuKApuW+jOiAheKApuKApuOAgmZvcm1hbO+8iOato+W8j+eahO+8ieOAgWZvcndhcmTvvIjlkJHliY3vvInjgIFmb3JlaWdu77yI5aSW5ZyL55qE77yJ44CCIn0seyJhbnN3ZXIiOjIsInpoIjoi5Zyw6ZyH5Zyo5pel5pys55m855Sf5b6X6Z2e5bi46aC757mB77yM5omA5Lul6YKj6KOh55qE5Lq655+l6YGT5aaC5L2V5L+d6K236Ieq5bex44CCIiwibm90ZSI6ImZyZXF1ZW50bHnvvIhhZHYuIOmgu+e5geWcsO+8jFNZTiBvZnRlbu+8ie+8jOW9ouWuueipniBmcmVxdWVudOOAgnJhcmVsee+8j2hhcmRseSDooajnpLrjgIzlvojlsJHjgI3vvIzoiIfoqp7mhI/nm7jlj43vvJtuZWFybHnvvIjlub7kuY7vvInkuI3ooajpoLvnjofjgIIifSx7ImFuc3dlciI6MCwiemgiOiLpl5zkuIrnqpfmiLblj6/ku6XpmLLmraLpm6jmsLTpo4TpgLLmiL/plpPjgIIiLCJub3RlIjoicHJldmVudO+8iHZ0LiDpmLLmraLvvIzpmLvmraLvvIxTWU4gc3RvcO+8ie+8m3ByZXZlbnQgc2Ivc3RoIGZyb20gVi1pbmfvvJvlkI3oqZ4gcHJldmVudGlvbuOAgnBlcm1pdO+8iOWFgeiose+8ieOAgXByb3ZpZGXvvIjmj5DkvpvvvInjgIFwcm9tb3Rl77yI5L+D6YCy77yJ44CCIn0seyJhbnN3ZXIiOjMsInpoIjoi56eR5a245a625q2j6Kmm5ZyW6L+95p+l55eF5q+S55qE5L6G5rqQ44CCIiwibm90ZSI6InRyYWNl77yIdnQuIOi/vei5pO+8jOi/vea6r++8m24uIFtVXVtDXSDnl5Xot6HvvIzouaTot6HvvInjgIJ0cmFkZe+8iOS6pOaYk++8ieOAgXRyYXDvvIjlm7DkvY/vvInjgIF0cmVhdO+8iOayu+eZgu+8m+WwjeW+he+8ieOAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6IkHvvJrkvaDllpzmraHpgqPkupvpo5/nianll47vvJ8gQu+8muWFtuWvpuaIkeimuuW+l+Wkqum5ueS6huOAgiIsIm5vdGUiOiJhY3R1YWxsee+8iGFkdi4g5a+m6Zqb5LiK77yM5LqL5a+m5LiK77yMU1lOIGluIGZhY3TvvInvvIzluLjnlKjkvobooajpgZToiIflsI3mlrnpoJDmnJ/kuI3lkIznmoTnnIvms5XjgIJleGFjdGx577yI5q2j5piv5aaC5q2k77yM6KGo5ZCM5oSP77yJ44CBZmluYWxsee+8iOe1guaWvO+8ieOAgW5hdHVyYWxsee+8iOeVtueEtu+8ieOAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IuS9oOeahOaXpeW4uOe/kuaFo+axuuWumuS6huS9oOacquS+huacieWkmuWBpeW6t+OAgiIsIm5vdGUiOiJkZXRlcm1pbmXvvIh2dC4g5rG65a6a77yMU1lOIGRlY2lkZe+8m+afpeaYju+8ie+8m+WQjeipniBkZXRlcm1pbmF0aW9u77yI5rG65b+D77yJ44CCZGVsaXZlcu+8iOmBnumAge+8ieOAgWRlY29yYXRl77yI6KOd6aO+77yJ44CBZGVkaWNhdGXvvIjlpYnnjbvvvInjgIIifSx7ImFuc3dlciI6MSwiemgiOiLmiJHlk6Xlk6XlkozmiJHlrozlhajnm7jlj43vvJrku5bmhJvlj4PliqDmtL7lsI3vvIzmiJHljbvmr5TovIPllpzmraHlvoXlnKjlrrbjgIIiLCJub3RlIjoib3Bwb3NpdGXvvIhhZGouIOebuOWPjeeahO+8m24uIFtDXSDnm7jlj43nmoTkurrkuovnianvvInvvJtiZSBjb21wbGV0ZSBvcHBvc2l0ZXMg5piv5a6M5YWo55u45Y+N55qE5YWp56iu5Lq644CCb3Bwb25lbnTvvIjlsI3miYvvvInjgIFvcHBvc2l0aW9u77yI5Y+N5bCN77yJ44CBb3Bpbmlvbu+8iOaEj+imi++8ieOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6IuWFqeajn+W7uuevieeJqeS5i+mWk+acieS4gOaineeLueeqhOeahOmAmumBk+mAmuW+gOW+jOiKseWckuOAgiIsIm5vdGUiOiJwYXNzYWdl77yIbi4gW0NdIOmAmumBk++8jOi1sOW7iu+8jFNZTiBjb3JyaWRvcu+8m+aWh+eroOS4reeahOS4gOaute+8ieOAgnBhc3Nlbmdlcu+8iOS5mOWuou+8ieOAgXBhY2thZ2XvvIjljIXoo7nvvInjgIFwYXNzcG9ydO+8iOitt+eFp++8ieOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6Iumjr+W6l+eahOaIv+mWk+avj+WkqeaXqeS4iuWcqOWuouS6uui1t+W6iuWJjemDveacg+S+i+ihjOaJk+aOg+OAgiIsIm5vdGUiOiJyb3V0aW5lbHnvvIhhZHYuIOaXpeW4uOWcsO+8jOS+i+ihjOWcsO+8ie+8jOWQjeipniByb3V0aW5l77yI5L6L6KGM5YWs5LqL77yJ44CCcmFyZWx577yI5b6I5bCR77yJ44CBcm91Z2hsee+8iOWkp+e0hO+8ieOAgXJlY2VudGx577yI5pyA6L+R77yJ6IiH44CM5q+P6YCx5LiA44CN5LiN5ZCI44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi57GD55CD6LO95b6M5LuW55qE6KWv6KGr6KKr5rGX5rC05r+V6YCP5LqG44CCIiwibm90ZSI6InN3ZWF077yIbi4gW1VdIOaxl+awtO+8m3ZpLiDlh7rmsZfvvInjgIJzd2VhdGVy77yI5q+b6KGj77yJ44CBc3dlZXDvvIjmjoPvvInjgIFzd2VldO+8iOeUnOeahO+8ieeCuuW9oui/keWtl+OAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IuWcqOmHjeimgeeahOihqOa8lOWJjeaEn+WIsOe3iuW8teaYr+W+iOato+W4uOeahOOAgiIsIm5vdGUiOiJub3JtYWzvvIhhZGouIOato+W4uOeahO+8jEFOVCBhYm5vcm1hbO+8ieOAgmZvcm1hbO+8iOato+W8j+eahO+8ieOAgWZpbmFs77yI5pyA5b6M55qE77yJ44CBbWVudGFs77yI5b+D55CG55qE77yJ44CCIn0seyJhbnN3ZXIiOjIsInpoIjoi5L2g5Y+v5Lul5Zyo55m+6LKo5YWs5Y+45LiJ5qiT6LK35Yiw5bua5oi/55So5ZOB44CCIiwibm90ZSI6ImRlcGFydG1lbnTvvIhuLiBbQ10g6YOo6ZaA77yb57O777yb55m+6LKo5YWs5Y+455qE5bCI5quD77yJ77yMZGVwYXJ0bWVudCBzdG9yZSDnmb7osqjlhazlj7jjgIJhcGFydG1lbnTvvIjlhazlr5PvvInjgIFjb21wYXJ0bWVudO+8iOmalOmWk++8ieeCuuW9oui/keWtl+OAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6Iua5lumdouWDj+S4gOmdouW3qOWkp+eahOmPoeWtkO+8jOaYoOWHuuS6hue+pOWxseOAgiIsIm5vdGUiOiJyZWZsZWN077yIdnQuIOWPjeWwhO+8m+WPjeaYoO+8m3ZpLiDlj43nnIHvvInvvJtyZWZsZWN0IHRoZSBtb3VudGFpbnMg5pig5Ye6576k5bGx44CCcmVsYXjvvIjmlL7prIbvvInjgIFyZWZ1c2XvvIjmi5LntZXvvInjgIFyZXBsee+8iOWbnuimhu+8ieOAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IuS4jeirluW5tOm9oeaIluaAp+WIpe+8jOavj+WAi+S6uumDveaHieipsuacieW5s+etieeahOWtuOe/kuapn+acg+OAgiIsIm5vdGUiOiJnZW5kZXLvvIhuLiBbQ11bVV0g5oCn5Yil77yJ44CCZ2VuZXJhbO+8iOS4gOiIrOeahO+8m+Wwh+i7je+8ieOAgWdlbmVyYXRpb27vvIjkuJbku6PvvInjgIFnZW5pdXPvvIjlpKnmiY3vvInngrogZ2VuLSDplovpoK3nmoTlvaLov5HlrZfjgIIifSx7ImFuc3dlciI6MCwiemgiOiLpgJnmop3msrPmiorln47luILliIbpmpTmiJDlhanlgIvpg6jliIbjgIIiLCJub3RlIjoic2VwYXJhdGXvvIh2dC4g5YiG6ZaL77yM5YiG6ZqU77yMQU5UIGNvbWJpbmUsIGpvaW4sIGNvbm5lY3TvvInvvJtzZXBhcmF0ZSBBIGludG8gQuOAgmNvbWJpbmXvvI9jb25uZWN077yPam9pbiDooajnpLrjgIzntZDlkIjjgIHpgKPmjqXjgI3vvIzoqp7mhI/nm7jlj43jgIIifSx7ImFuc3dlciI6MSwiemgiOiLmm7jlupfmiormlrDnmoTmmqLpirfmm7jpmbPliJflnKjmq6Xnqpfoo6HjgIIiLCJub3RlIjoiZGlzcGxhee+8iHZ0LiDlsZXnpLrvvIzpmbPliJfvvJtuLiBbQ11bVV0g5bGV56S677yJ77ybb24gZGlzcGxheSDlsZXnpLrkuK3jgIJkaXN0YW5jZe+8iOi3nembou+8ieOAgWRpc2Vhc2XvvIjnlr7nl4XvvInjgIFkaXNwdXRl77yI54it6KuW77yJ44CCIn0seyJhbnN3ZXIiOjAsInpoIjoi6YCZ5YCL5Zyw5Y2A5Zug54K65pyJ576O6bqX55qE5rW35bK457ea77yM5Zyo6KeA5YWJ5LiK5b6I5pyJ5r2b5Yqb44CCIiwibm90ZSI6InBvdGVudGlhbO+8iG4uIFtVXSDmvZvlipvvvJthZGouIOaciea9m+WKm+eahO+8jOa9m+WcqOeahO+8ieOAgnBvdmVydHnvvIjosqfnqq7vvInjgIFwb2xsdXRpb27vvIjmsaHmn5PvvInjgIFwb3B1bGF0aW9u77yI5Lq65Y+j77yJ54K6IHBvLSDplovpoK3nmoTlkI3oqZ7jgIIifSx7ImFuc3dlciI6MSwiemgiOiLmi7Pmk4rmmK/kuIDpoIXpnIDopoHlipvph4/lkozpgJ/luqbnmoTpq5Tog73pgYvli5XjgIIiLCJub3RlIjoicGh5c2ljYWzvvIhhZGouIOi6q+mrlOeahO+8m+eJqeeQhueahO+8ie+8jGEgcGh5c2ljYWwgY2hlY2t1cCDlgaXlurfmqqLmn6XjgIJwb2xpdGljYWzvvIjmlL/msrvnmoTvvInjgIFtdXNpY2Fs77yI6Z+z5qiC55qE77yJ44CBbG9naWNhbO+8iOWQiOmCj+i8r+eahO+8ieeCuuWQjOaooyAtYWwg57WQ5bC+55qE5b2i5a656Kme44CCIn0seyJhbnN3ZXIiOjIsInpoIjoi6YCZ5qKd6KGX55qE6YCf6ZmQ5piv5q+P5bCP5pmC5LqU5Y2B5YWs6YeM44CCIiwibm90ZSI6ImxpbWl077yIbi4gW0NdIOmZkOWItu+8jOmZkOW6pu+8jOWmgiBzcGVlZCBsaW1pdO+8m3Z0LiDpmZDliLbvvInjgIJsYWJlbO+8iOaomeexpO+8ieOAgWxhY2vvvIjnvLrkuY/vvInjgIFsaW5r77yI6YCj57WQ77yJ44CCIn0seyJhbnN3ZXIiOjMsInpoIjoi5paw6KaP5a6a5bCN5LqL5pWF5Lu25pW45rKS5pyJ5Lu75L2V5b2x6Z+/44CCIiwibm90ZSI6ImVmZmVjdO+8iG4uIFtDXVtVXSDlvbHpn7/vvIzmlYjmnpzvvInvvJtoYXZlIGFuIGVmZmVjdCBvbiAuLi4g5bCN4oCm4oCm5pyJ5b2x6Z+/44CCZWZmb3J077yI5Yqq5Yqb77yJ44CBZXhjdXNl77yI6JeJ5Y+j77yJ44CBZXhwZXJ077yI5bCI5a6277yJ44CC5rOo5oSPIGVmZmVjdO+8iOWQjeipnu+8ieiIhyBhZmZlY3TvvIjli5XoqZ7vvIzlvbHpn7/vvInnmoTlt67liKXjgIIifSx7ImFuc3dlciI6MiwiemgiOiLluILplbfluIzmnJvol4nnlLHlnKjmsrPpgorok4vmlrDlhazlnJLkvobkv4PpgLLop4DlhYnjgIIiLCJub3RlIjoicHJvbW90Ze+8iHZ0LiDkv4PpgLLvvJvmjqjpirfvvJvmmYnljYfvvInjgIJwcmV2ZW5077yI6Zi75q2i77yJ6IiH6Kqe5oSP55u45Y+N77ybcHJvZHVjZe+8iOeUn+eUou+8ieOAgXByb3ZpZGXvvIjmj5DkvpvvvInjgIIifSx7ImFuc3dlciI6MSwiemgiOiJTYW0g5LiN6IKv5om/6KqN5LuW5bCN54i25q+N6Kqq5LqG6KyK44CCIiwibm90ZSI6ImFkbWl077yIdnQuIOaJv+iqje+8jFNZTiBjb25mZXNz77yJ77ybYWRtaXQgKyB0aGF0IOWtkOWPpe+8j1YtaW5n44CCcGVybWl077yI5YWB6Kix77yJ44CBc3VibWl077yI5o+Q5Lqk77yJ44CBY29tbWl077yI54qv5LiL77yb5om/6Ku+77yJ54K6IC1taXQg57WQ5bC+55qE5b2i6L+R5a2X44CCIn0seyJhbnN3ZXIiOjAsInpoIjoi6YCZ5YCL5YyF5YyF55qE55qu6Z2p5piv55yf55qE44CB5LiN5piv5Lu/5YaS55qE77yM6IGe5ZGz6YGT5bCx55+l6YGT44CCIiwibm90ZSI6ImF1dGhlbnRpY++8iGFkai4g6YGT5Zyw55qE77yb55yf5q2j55qE77yMU1lOIHJlYWwsIGdlbnVpbmXvvInjgIJhdXRvbWF0aWPvvIjoh6rli5XnmoTvvInjgIFhdmVyYWdl77yI5bmz5Z2H55qE77yJ44CBYW5jaWVudO+8iOWPpOiAgeeahO+8ieOAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IueCuuS6huWbnuWgseS9oOeahOW5q+W/me+8jOaIkeiri+S9oOWQg+aZmumkkOOAgiIsIm5vdGUiOiJpbiBleGNoYW5nZSBmb3IgLi4u77yI5L2c54K64oCm4oCm55qE5Lqk5o+b77yJ44CCZXhjaGFuZ2XvvIhuLiBbQ11bVV0g5Lqk5o+b77ybdnQuIOS6pOaPm++8ieOAgmV4Y3VzZe+8iOiXieWPo++8ieOAgWV4YW1wbGXvvIjkvovlrZDvvInjgIFleGVyY2lzZe+8iOmBi+WLle+8ieeCuiBleC0g6ZaL6aCt55qE5b2i6L+R5a2X44CCIn0seyJhbnN3ZXIiOjIsInpoIjoi6YCZ5Lu95aCx5ZGK5by36Kq/5LqG5YGP6YSJ5Zyw5Y2A6ZyA6KaB5pu05aSa6ICB5bir44CCIiwibm90ZSI6ImhpZ2hsaWdodO+8iHZ0LiDlvLfoqr/vvJvku6XonqLlhYnnrYbmqJnnpLrvvJtuLiBbQ10g5pyA57K+6YeH55qE6YOo5YiG77yJ44CCaGlkZe+8iOmaseiXj++8ieOAgWh1cnTvvIjlgrflrrPvvInjgIFoYW5n77yI5oe45o6b77yJ44CCIn0seyJhbnN3ZXIiOjMsInpoIjoi5aW56ZaL5pyX55qE56yR6IGy6K6T5ZGo5ZyN55qE5q+P5YCL5Lq66YO95oSf5Yiw5b+r5qiC44CCIiwibm90ZSI6ImNoZWVyZnVs77yIYWRqLiDmhInlv6vnmoTvvIzplovmnJfnmoTvvInjgIJjYXJlZnVs77yI5bCP5b+D55qE77yJ44CBdXNlZnVs77yI5pyJ55So55qE77yJ44CBaGFybWZ1bO+8iOacieWus+eahO+8ieeCuuWQjOaooyAtZnVsIOe1kOWwvueahOW9ouWuueipnuOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6Iuiri+WcqOihqOagvOS4iuWhq+Wvq+S9oOeahOWnk+WQjeOAgeW5tOm9oeWSjOiBt+alreOAgiIsIm5vdGUiOiJvY2N1cGF0aW9u77yIbi4gW0NdIOiBt+alre+8jFNZTiBqb2LvvJvljaDpoJjvvIzljaDnlKjvvInvvJvli5XoqZ4gb2NjdXB544CCb2NjYXNpb27vvIjloLTlkIjvvInjgIFvcGVyYXRpb27vvIjmiYvooZPvvInjgIFvcmdhbml6YXRpb27vvIjntYTnuZTvvInjgIIifSx7ImFuc3dlciI6MSwiemgiOiLlhazou4rmmK/kuIDnqK7lj6/ku6XlkIzmmYLovInlvojlpJrkuZjlrqLnmoTkuqTpgJrlt6XlhbfjgIIiLCJub3RlIjoidmVoaWNsZe+8iG4uIFtDXSDou4rovJvvvIzkuqTpgJrlt6XlhbfvvInjgIJ2ZXNzZWzvvIjoiLnvvJvlrrnlmajvvInjgIF2YWxsZXnvvIjlsbHosLfvvInjgIF2YWNhdGlvbu+8iOWBh+acn++8ieOAgiJ9LHsiYW5zd2VyIjoxLCJ6aCI6Iumnlemnm+S6uuW/hemgiOWcqOaWkemmrOe3muWJjeWBnOS4i+S+huiuk+ihjOS6uumAmumBjuOAgiIsIm5vdGUiOiJwZWRlc3RyaWFu77yIbi4gW0NdIOihjOS6uu+8ie+8m2Nyb3Nzd2FsayDmlpHppqznt5rjgIJwZXJmb3JtZXLvvIjooajmvJTogIXvvInjgIFwcmVzaWRlbnTvvIjnuL3ntbHvvInjgIFwb2xpdGljaWFu77yI5pS/5rK75Lq654mp77yJ44CCIn0seyJhbnN3ZXIiOjMsInpoIjoi5a2p5a2Q5aSp55Sf5bCx5bCN5ZGo6YGt55qE5LiW55WM5YWF5ru/5aW95aWH44CCIiwibm90ZSI6ImN1cmlvdXPvvIhhZGouIOWlveWlh+eahO+8ie+8m2JlIGN1cmlvdXMgYWJvdXQgLi4u44CCZnVyaW91c++8iOaatOaAkueahO+8ieOAgXNlcmlvdXPvvIjlmrTogoXnmoTvvInjgIFhbnhpb3Vz77yI54Sm5oWu55qE77yJ54K65ZCM5qijIC1pb3VzIOe1kOWwvueahOW9oui/keWtl+OAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6IumAgee0heWMheeahOe/kuS/l+i1t+a6kOaWvOWPpOS7o+S4reWci+OAgiIsIm5vdGUiOiJvcmlnaW5hdGXvvIh2aS4g6LW35rqQ77yM5rqQ6Ieq77yJ77ybb3JpZ2luYXRlIGluL2Zyb20gLi4u44CCb2J0YWlu77yI542y5b6X77yJ44CBb3BlcmF0Ze+8iOaTjeS9nO+8ieOAgW9jY3Vwee+8iOWNoOaTmu+8ieOAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6IuWBmuaxuuWumuWJje+8jOaIkeWAkeaHieipsuW+nuWQhOWAi+mdouWQkeS+hueci+mAmeWAi+WVj+mhjOOAgiIsIm5vdGUiOiJhc3BlY3TvvIhuLiBbQ10g5pa56Z2i77yM5bGk6Z2i77yJ77ybZXZlcnkgYXNwZWN0IOWQhOWAi+WxpOmdouOAgmFzc2V077yI6LOH55Si77yJ44CBYWNjZW5077yI5Y+j6Z+z77yJ44CBYWNjZXNz77yI5o6l6L+R77yb5L2/55So5qyK77yJ54K6IGEg6ZaL6aCt55qE5b2i6L+R5a2X44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi5pq06aKo6Zuo5L6G6Ieo5YmN77yM54OP6Zuy6ZaL5aeL5Zyo5aSp56m66IGa6ZuG44CCIiwibm90ZSI6ImdhdGhlcu+8iHZpLjsgdnQuIOiBmumbhu+8jOmbhuWQiO+8m+aUtumbhu+8ieOAgmdhbWJsZe+8iOizreWNmu+8ieOAgWdhcmRlbu+8iOiKseWcku+8ieOAgWdhemXvvIjlh53oppbvvInjgIIifSx7ImFuc3dlciI6MiwiemgiOiLlhJjnrqHkuIvokZflpKfpm6jvvIzop4DnnL7ku43nhLbnlZnlnKjluqfkvY3kuIrnm7TliLDooajmvJTntZDmnZ/jgIIiLCJub3RlIjoicmVtYWlu77yIdmkuIOS/neaMge+8m+eVmeS4i++8jFNZTiBzdGF577yJ77ybcmVtYWluICsg5b2i5a656Kme77yP5Zyw6bue44CCcmVtb3Zl77yI56e76Zmk77yJ44CBcmVtaW5k77yI5o+Q6YaS77yJ44CBcmVwbGFjZe+8iOWPluS7o++8ieOAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IuaIkeWAkeeahOaxuuWumuWwh+S7peiqv+afpee1kOaenOeCuuS+neaTmuOAgiIsIm5vdGUiOiJiZSBiYXNlZCBvbiAuLi7vvIjku6XigKbigKbngrrln7rnpI7vvI/moLnmk5rvvInvvJvmraTomZXngrrooqvli5XvvIzopoHnlKjpgY7ljrvliIboqZ4gYmFzZWTjgIJiYXNlZCBpbu+8iOS7peKApuKApueCuue4vemDqO+8ieaEj+aAneS4jeWQjOOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6Iuavj+WAi+S6uumDveWQjOaEj+e2k+eQhueahOW7uuitsO+8jOaJgOS7peacg+itsOW+iOW/q+Wwsee1kOadn+S6huOAgiIsIm5vdGUiOiJnbyBhbG9uZyB3aXRoIC4uLu+8iOWQjOaEj++8m+i0iuaIkO+8ieOAgmdldCBhbG9uZyB3aXRo77yI6IiH4oCm4oCm55u46JmV77yJ44CBY29tZSB1cCB3aXRo77yI5oOz5Ye677yJ44CBa2VlcCB1cCB3aXRo77yI6Lef5LiK77yJ44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi5oiR5rKS5pyJ5Zyo55Sf5L2g55qE5rCj77yM55Wi56uf5L2g5LiN5piv5pWF5oSP55qE44CCIiwibm90ZSI6ImFmdGVyIGFsbO+8iOeVouern++8jOWIpeW/mOS6hu+8ie+8jOeUqOS+huijnOWFheeQhueUseOAgmF0IGFsbO+8iOS4gOm7nuS5n++8jOeUqOWcqOWQpuWumu+8j+eWkeWVj+WPpe+8ieOAgWluIGFsbO+8iOe4veWFse+8ieOAgWFib3ZlIGFsbO+8iOacgOmHjeimgeeahOaYr++8ieOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6IuaIkeS4jeWcqOS5juWIpeS6uuaAjum6vOeci+aIke+8jOaIkemBjuaIkeiHquW3seeahOeUn+a0u+OAgiIsIm5vdGUiOiJjYXJlIGFib3V0IC4uLu+8iOWcqOS5ju+8jOmXnOW/g++8ieOAgmNhcmUgZm9y77yI54Wn6aGn77yb5Zac5q2h77yJ44CBY2FyZSBvZu+8iOWcqOKApuKApueFp+mhp+S4i++8ie+8jOiqnuaEj+S4jeWQjOOAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6IueUn+aEj+WkseaVl+W+jO+8jOS7luaxuuWumuaQrOWIsOWci+WklumHjeaWsOmWi+Wni+OAgiIsIm5vdGUiOiJtYWtlIGEgZnJlc2ggc3RhcnTvvIjph43mlrDplovlp4vvvInjgIJtYWtlIGEgcGhvbmUgY2FsbO+8iOaJk+mbu+ipse+8ieOAgW1ha2UgZnJpZW5kc++8iOS6pOaci+WPi++8ieOAgW1ha2UgYSBzcGVlY2jvvIjmvJTorJvvvInjgIIifSx7ImFuc3dlciI6MywiemgiOiLmlL/lupzmg7PntYLntZDpgJnlgIvlnLDljYDnmoTpnZ7ms5XmjZXprZrooYzngrrjgIIiLCJub3RlIjoicHV0IGFuIGVuZCB0byAuLi7vvIjntYLntZDvvIzntZDmnZ/vvInjgIJwdXQgdXAgd2l0aO+8iOW/jeWPl++8ieOAgXB1dCBvZmbvvIjlu7blvozvvInjgIFwdXQgb27vvIjnqb/kuIrvvJvkuIrmvJTvvInjgIIifSx7ImFuc3dlciI6MywiemgiOiLpgJnmlK/nkIPpmorpgLLmraXlvojlpJrvvIzkvYbpm6LlparlhqDpgoTmnInlvojplbfkuIDmrrXot6/opoHotbDjgIIiLCJub3RlIjoiaGF2ZSBhIGxvbmcgd2F5IHRvIGdv77yI6YKE5pyJ5b6I6ZW355qE6Lev6KaB6LWw77yM5LuN6ZyA5Yqq5Yqb77yJ44CC5YW25LuW6YG46aCF5LiN5piv6YCZ5YCL5Zu65a6a6Kqq5rOV44CCIn0seyJhbnN3ZXIiOjIsInpoIjoi6LaF6YGO5YWp55m+5ZCN5a2455Sf5bCH5Y+D5Yqg6Iux6Kqe5ryU6Kyb5q+U6LO944CCIiwibm90ZSI6InRha2UgcGFydCBpbiAuLi7vvIjlj4PliqDvvInjgIJ0YWtlIHBsYWNl77yI6IiJ6KGM77yM5LiN5o6l5Y+X6Kme77yJ44CBdGFrZSBjYXJlIG9m77yI54Wn6aGn77yJ44CBdGFrZSBvZmbvvIjotbfpo5vvvJvohKvkuIvvvInjgIIifSx7ImFuc3dlciI6MCwiemgiOiLnjajoh6rml4XooYzkuIDlgIvmnIjnnJ/nmoTorpPmiJHopovorZjliLDpgJnlgIvkuJbnlYzmnInlpJrlpKfjgIIiLCJub3RlIjoib3BlbiBvbmUncyBleWVzIHRvIC4uLu+8iOS9v+afkOS6uuiqjeitmOWIsO+8j+mWi+ecvOeVjO+8ieOAgmNsb3Nl77yPc2h1dCBvbmUncyBleWVzIHRvIC4uLiDliYfmmK/jgIzlsI3igKbigKboppbogIzkuI3opovjgI3vvIzmhI/mgJ3nm7jlj43jgIIifSx7ImFuc3dlciI6MSwiemgiOiLlqZrnpq7lsIflnKjmtbfpgornmoTkuIDplpPlsI/mlZnloILoiInooYzjgIIiLCJub3RlIjoidGFrZSBwbGFjZe+8iOiIieihjO+8jOeZvOeUn++8ieeCuuS4jeWPiueJqeeJh+iqnu+8jOS4u+ipnuaYr+S6i+S7tu+8jOeEoeiiq+WLleOAgnRha2UgcGFydCDopoHmjqUgaW7vvJt0YWtlIG92ZXLvvIjmjqXnrqHvvInjgIF0YWtlIG9mZu+8iOi1t+mjm++8ieOAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6IuS7luWAkeWcqOWkqem7keWJjeWcqOa5lumCiuaQreWlveS6huW4s+evt+OAgiIsIm5vdGUiOiJwdXQgdXDvvIjmkK3lu7rvvIzmnrboqK3vvJvlvLXosrzvvInjgIJwdXQgb3V077yI54aE5ruF77yJ44CBcHV0IG9mZu+8iOW7tuW+jO+8ieOAgXB1dCBhd2F577yI5pS26LW35L6G77yJ44CCIn0seyJhbnN3ZXIiOjMsInpoIjoi6YCZ5YCL6Kqk5pyD5piv5oCO6bq855m855Sf55qE77yfIiwibm90ZSI6ImNvbWUgYWJvdXTvvIjnmbznlJ/vvIznlKLnlJ/vvIxTWU4gaGFwcGVu77yJ54K65LiN5Y+K54mp54mH6Kqe77yM5bi455So5pa8IEhvdyBkaWQgLi4uIGNvbWUgYWJvdXQ/44CCY29tZSBhY3Jvc3PvvIjlgbbpgYfvvInjgIFjb21lIHRydWXvvIjlr6bnj77vvInjgIFjb21lIGlu77yI6YCy5L6G77yJ44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi5b+X5bel5bCH5Zyo6LuK56uZ5aSW55m85pS+5YWN6LK75YKz5Zau44CCIiwibm90ZSI6ImhhbmQgb3V077yI5YiG55m877yM55m85pS+77yJ44CCaGFuZCBpbu+8iOe5s+S6pO+8ieOAgWhhbmQgZG93bu+8iOWCs+S4i+WOu++8ieOAgWhhbmQgb3Zlcu+8iOS6pOWHuu+8ieOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6IuaIv+WtkOW+jOmdouacieS4gOW6p+Wkp+iKseWckuOAgiIsIm5vdGUiOiLlnLDmlrnlia/oqZ7niYfoqp7mlL7lj6XpppbnmoTlgJLoo53vvJpCZWhpbmQgdGhlIGhvdXNlIGxpZXMgYSBsYXJnZSBnYXJkZW4u77yI5YuV6Kme5Zyo5Li76Kme5YmN6Z2i77yM5Zau6KSH5pW45L6d5b6M6Z2i55yf5q2j55qE5Li76KmeIGEgbGFyZ2UgZ2FyZGVuIOaxuuWumu+8ieOAgmxheSDmmK/jgIzmlL7nva7jgI3vvIzlj4rnianli5XoqZ7vvIzkuI3lkIjjgIIifSx7ImFuc3dlciI6MiwiemgiOiLmm7jmnrbkuIrmlL7okZfoqLHlpJroiIrnm7jnsL/jgIIiLCJub3RlIjoi5Zyw5pa55Ymv6Kme5YCS6KOd77yIT24gdGhlIHNoZWxmIHNpdCBtYW55IG9sZCBwaG90byBhbGJ1bXMu77yJ77yb55yf5q2j5Li76KmeIG1hbnkgb2xkIHBob3RvIGFsYnVtcyDmmK/opIfmlbjvvIzli5XoqZ7nlKggc2l044CCIn0seyJhbnN3ZXIiOjMsInpoIjoi5LiA6Zq75bCP6LKT5b6e566x5a2Q6KOh6Lez5LqG5Ye65L6G44CCIiwibm90ZSI6IuWcsOaWueWJr+ipnuWAkuijne+8jOS4u+ipnuaYr+WWruaVuCBhIHRpbnkga2l0dGVu77yM5Y+l5a2Q5piv5pWY6L+w6YGO5Y6755m855Sf55qE5YuV5L2c77yM55SoIGp1bXBlZOOAgmp1bXAg5LiN6IO96YWN5Zau5pW456ys5LiJ5Lq656ix5Li76Kme44CCIn0seyJhbnN3ZXIiOjAsInpoIjoi5YWs6LuK5L6G5LqG77yM5b+r5LiA6bue77yBIiwibm90ZSI6IkhlcmUgKyDli5XoqZ4gKyDlkI3oqZ7kuLvoqZ7vvIhIZXJlIGNvbWVzIHRoZSBidXMu77yJ77yb5Li76KmeIHRoZSBidXMg54K65Zau5pW477yM5omA5Lul55SoIGNvbWVz44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi5LuW5YCR56yR5b6X5b6I5aSn6IGy77yM5LiA6YKK6LeR6ZaL5LqG44CCIiwibm90ZSI6IuWcsOaWueWJr+ipnuaUvuWPpemmluaZgu+8jOS4u+ipnuiLpeaYr+S7o+WQjeipnu+8jOS4jeWAkuijne+8mkF3YXkgdGhleSByYW4u77yIQXdheSByYW4gdGhlIGJveXMuIOaJjeWPr+WAkuijneWQjeipnu+8ieOAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6Ium6teWMheW6l+aXgemCiuacieWFqemWk+Wwj+iKseW6l+OAgiIsIm5vdGUiOiLlnLDmlrnlia/oqZ7lgJLoo53vvJpOZXh0IHRvIHRoZSBiYWtlcnkgc3RhbmQgdHdvIHNtYWxsIGZsb3dlciBzaG9wcy7vvJvkuLvoqZ4gdHdvIHNtYWxsIGZsb3dlciBzaG9wcyDngrropIfmlbjvvIzli5XoqZ7nlKggc3RhbmTjgIIifSx7ImFuc3dlciI6MCwiemgiOiLmiJHnmoTooajlp4rmmK/orbfnkIbluKvvvIzlnKjlj7DkuK3nmoTphqvpmaLlt6XkvZzjgIIiLCJub3RlIjoi6Z2e6ZmQ5a6a6Zec5Luj77ya5YWI6KGM6KmeIE15IGNvdXNpbiDmmK/kurrvvIzkuJTlnKjlrZDlj6XkuK3nlbbkuLvoqZ7vvIzmiYDku6XnlKggd2hv44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi5YWD5a6156+A5Zyo6L6y5puG5LiA5pyI5Y2B5LqU5pel77yM5YWo5Y+w5ZCE5Zyw6YO95pyD5oW256Wd44CCIiwibm90ZSI6IumdnumZkOWumumXnOS/guWtkOWPpe+8iOmAl+iZn+WJjeW+jO+8ieWFiOihjOipnueCuuS6i+eJqe+8jOeUqCB3aGljaO+8m+mdnumZkOWumumXnOS/guWtkOWPpeS4jeiDveeUqCB0aGF077yM5Lmf5LiN6IO955SoIHdoYXTjgIIifSx7ImFuc3dlciI6MiwiemgiOiLmiJHlvp7lsI/lsLHoqo3orZjnmoTlvpDlhYjnlJ/opoHmkKzliLDliqDmi7/lpKfkuobjgIIiLCJub3RlIjoi5YWI6KGM6KmeIE1yLiBIc3Ug5piv5Lq677yM5Zyo5a2Q5Y+l5Lit55W2IGtub3duIOeahOWPl+ipnu+8jOaJgOS7peeUqCB3aG9t44CCd2hvc2Ug6KGo5omA5pyJ5qC877yMd2hpY2gg5oyH5LqL54mp77yMd2hlcmUg5oyH5Zyw6bue44CCIn0seyJhbnN3ZXIiOjAsInpoIjoi5Y+w5YyXIDEwMSDpq5ggNTA4IOWFrOWwuu+8jOabvue2k+aYr+S4lueVjOesrOS4gOmrmOaok+OAgiIsIm5vdGUiOiJ3aG9zZSArIOWQjeipnu+8iGhlaWdodO+8ieihqOaJgOacieagvO+8jOetieaWvCB0aGUgaGVpZ2h0IG9mIHdoaWNo44CCd2hpY2jvvI93aG8g5b6M6Z2i5LiN6IO955u05o6l5o6l5ZCN6KmeIGhlaWdodOOAgiJ9LHsiYW5zd2VyIjoxLCJ6aCI6IuaIkeWkp+WtuOaZgueahOWupOWPiyBTb3BoaWUg54++5Zyo5piv55+l5ZCN5L2c5a625LqG44CCIiwibm90ZSI6IuS7i+ezu+ipniB3aXRoIOW+jOmdoueahOmXnOS7o+WPquiDveeUqCB3aG9t77yI5Lq677yM5Y+X5qC877yJ77yM5LiN6IO955SoIHdob+OAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IuaIkeWAkei6sumbqOeahOmCo+mWk+iAgeW7n+W3suacieWFqeeZvuW5tOatt+WPsuOAgiIsIm5vdGUiOiLjgIzku4vns7voqZ7vvIvpl5zku6PjgI3kuJTlhYjooYzoqZ7mmK/kuovnianmmYLnlKggd2hpY2jvvJvlnKjpnZ7pmZDlrprlrZDlj6XkuK3kuI3og73nlKggdGhhdO+8m2luIHdoaWNoIOS5n+WPr+aPm+aIkCB3aGVyZe+8jOS9hiBpbiB3aGVyZSDkuI3pgJrjgIIifSx7ImFuc3dlciI6MiwiemgiOiLmiJHms6jmhI/liLDmnInlgIvpmYznlJ/kurrlnKjlsI3ooZfnnIvokZfmiJHlgJHnmoTmiL/lrZDjgIIiLCJub3RlIjoi5oSf5a6Y5YuV6KmeIG5vdGljZS9zZWUvaGVhci93YXRjaCArIE8gKyBW77yI5Y6f5b2i77yM6KGo5LqL5a+m77yJ77yPVi1pbmfvvIjooajmraPlnKjpgLLooYzvvInjgILmraTpoYzpgbjpoIXlj6rmnIkgbG9va2luZyDnrKblkIjvvIzkuI3og73nlKggdG8gVuOAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IuaIkeWAkeeci+iRl+mjm+apn+i1t+mjm++8jOa2iOWkseWcqOmbsuWxpOijoeOAgiIsIm5vdGUiOiJ3YXRjaCArIE8gKyDljp/lvaLli5XoqZ7vvJthbmQg6YCj5o6l55qE5YWp5YCL5YuV5L2cIHRha2Ugb2ZmIC8gZGlzYXBwZWFyIOimgeWQjOeCuuWOn+W9ouOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6IuWlueaEn+imuuWIsOa3muawtOa7keiQveiHiemgsO+8jOeEtuW+jOeskeS6huOAgiIsIm5vdGUiOiLmhJ/lrpjli5XoqZ4gZmVlbCArIE8gKyDljp/lvaLli5XoqZ7vvIjlvLfoqr/li5XkvZznmbznlJ/vvInjgILkuI3og73liqAgdG/vvIzkuZ/kuI3nlKjnrKzkuInkurrnqLEgc+OAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6IuaIkeeci+WIsOWtqeWtkOWAkeWcqOe0heeHiOmChOS6ruiRl+aZgui3kemBjummrOi3r+OAgiIsIm5vdGUiOiJzZWUgKyBPICsg5Y6f5b2i5YuV6Kme44CCcmFuIOaYr+mBjuWOu+W8j++8jHRvIHJ1biDlpJrkuoYgdG/vvIxydW5zIOWkmuS6hiBz77yM6YO95LiN5ZCI44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi6ICB5bir6IG95Yiw5pyJ5Lq65Zyo5pWZ5a6k5aSW5Y+r5LuW55qE5ZCN5a2X44CCIiwibm90ZSI6ImhlYXIgKyBPICsg5Y6f5b2i5YuV6Kme77yIc29tZW9uZSDkuLvli5XlgZogY2FsbCDpgJnlgIvli5XkvZzvvInjgILoi6Xlr6vmiJAgaGVhcmQgaGlzIG5hbWUgY2FsbGVkIOWJhyBPIOaYryBoaXMgbmFtZe+8jOeUqOmBjuWOu+WIhuipnuihqOiiq+WLle+8jOWFqeiAheimgeeci+WPl+ipnuaYr+iqsOOAgiJ9LHsiYW5zd2VyIjoyLCJ6aCI6IuS7luaEn+imuuWIsOWPo+iii+ijoeeahOaJi+apn+WcqOmch+WLle+8jOaJgOS7peaKiuWug+aLv+S6huWHuuS+huOAgiIsIm5vdGUiOiJmZWVsICsgTyArIOWOn+W9ouWLleipnuOAgiJ9LHsiYW5zd2VyIjowLCJ6aCI6IuaIkeWAkeWIsOmbu+W9semZouaZgu+8jOmbu+W9seW3sue2k+mWi+a8lOS6huOAgiIsIm5vdGUiOiLpgY7ljrvovIPml6nnmbznlJ/nmoTli5XkvZznlKjpgY7ljrvlrozmiJDlvI8gaGFkICsgcC5wLu+8muWIsOmBlO+8iOmBjuWOu++8ieS5i+WJjembu+W9seW3sue2k+mWi+Wni+OAgmJ5IHRoZSB0aW1lICsg6YGO5Y675byP77yM5Li75Y+l5bi455So6YGO5Y675a6M5oiQ5byP44CCIn0seyJhbnN3ZXIiOjEsInpoIjoi5oiR6YaS5L6G5pmC77yM5oiR5ZOl5ZOl5bey57aT5Ye66ZaA5Y675LiK5a245LqG44CCIiwibm90ZSI6ImJ5IHRoZSB0aW1lIEkgd29rZSB1cO+8iOmBjuWOu++8ieKGkiDkuLvlj6XnlKggaGFkIGxlZnTvvIjmm7Tml6nlt7LlrozmiJDvvInjgIJoYXMgbGVmdCDmmK/nj77lnKjlrozmiJDlvI/vvIzkuI3og73phY3pgY7ljrvmmYLplpPjgIIifSx7ImFuc3dlciI6MywiemgiOiLmspLmnInkurrnn6XpgZMgS2F0ZSDmkKzkvobkuYvliY3kvY/lnKjlk6roo6HjgIIiLCJub3RlIjoiYmVmb3JlIHNoZSBtb3ZlZCBoZXJl77yI6YGO5Y6777yJ5LmL5YmN55qE54uA5oWL55So6YGO5Y675a6M5oiQ5byPIGhhZCBsaXZlZOOAgiJ9LHsiYW5zd2VyIjozLCJ6aCI6IuS7luWAkeWQg+WujOaZmumkkOW+jOWwsea0l+eil+OAgiIsIm5vdGUiOiJhZnRlciDlrZDlj6XnmoTli5XkvZzvvIjlkIPlrozvvInmr5Qgd2FzaGVkIOabtOaXqe+8jOeUqOmBjuWOu+WujOaIkOW8jyBoYWQgZmluaXNoZWTjgIIifSx7ImFuc3dlciI6MCwiemgiOiLmiJHlm57liLDlrrbmiY3nmbznj77miJHmiorpm6jlgpjlv5jlnKjlhazou4rkuIrkuobjgIIiLCJub3RlIjoicmVhbGl6ZWTvvIjpgY7ljrvvvInihpIg5pu05pep55qE5YuV5L2c44CM5oqK5YKY5b+Y5Zyo5YWs6LuK5LiK44CN55SoIGhhZCBsZWZ044CCIn0seyJhbnN3ZXIiOjEsInpoIjoi5oiR5YCR5oq16YGU5pyI5Y+w5pmC77yM54Gr6LuK5bey57aT6ZaL6LWw5LqG44CCIiwibm90ZSI6ImJ5IHRoZSB0aW1lIHdlIHJlYWNoZWTvvIjpgY7ljrvvvInihpIgaGFkIGFscmVhZHkgbGVmdOOAguWJr+ipniBhbHJlYWR5IOaUvuWcqCBoYWQg6IiHIHAucC4g5LmL6ZaT44CCIn1d"
+}
