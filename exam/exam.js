@@ -31,13 +31,20 @@
     return res.json();
   }
 
-  // 考卷檔把 answer / zh / note 收進 base64 的 secret 欄位；載入後在這裡還原
+  // 考卷檔把 answer / zh / note（拼字題另有 accept）收進 base64 的 secret 欄位；載入後在這裡還原
   function unlock(exam) {
     if (typeof exam.secret !== 'string') return exam;
     const bytes = Uint8Array.from(atob(exam.secret), (c) => c.charCodeAt(0));
     const sec = JSON.parse(new TextDecoder('utf-8').decode(bytes));
-    if (!Array.isArray(sec) || sec.length !== exam.questions.length) throw new Error('secret 與題數不符');
-    exam.questions = exam.questions.map((q, i) => ({ ...q, ...sec[i] }));
+    if (Array.isArray(exam.sections)) {
+      const total = exam.sections.reduce((n, s) => n + s.questions.length, 0);
+      if (!Array.isArray(sec) || sec.length !== total) throw new Error('secret 與題數不符');
+      let i = 0;
+      exam.sections = exam.sections.map((s) => ({ ...s, questions: s.questions.map((q) => ({ ...q, ...sec[i++] })) }));
+    } else {
+      if (!Array.isArray(sec) || sec.length !== exam.questions.length) throw new Error('secret 與題數不符');
+      exam.questions = exam.questions.map((q, i) => ({ ...q, ...sec[i] }));
+    }
     delete exam.secret;
     return exam;
   }
@@ -53,13 +60,18 @@
   /* ---------- 基本防複製（純前端，只擋一般操作） ---------- */
 
   const stop = (e) => e.preventDefault();
-  ['contextmenu', 'copy', 'cut', 'dragstart', 'selectstart'].forEach((t) => document.addEventListener(t, stop));
+  ['contextmenu', 'copy', 'cut', 'dragstart'].forEach((t) => document.addEventListener(t, stop));
+  // 拼字題的輸入框要能正常打字與游標選取，其餘文字仍不可選
+  document.addEventListener('selectstart', (e) => {
+    if (!(e.target instanceof Element && e.target.closest('input'))) e.preventDefault();
+  });
   document.addEventListener('keydown', (e) => {
     const k = e.key.toLowerCase();
     const mod = e.ctrlKey || e.metaKey;
     const devtools = e.key === 'F12' || (mod && (e.shiftKey || e.altKey) && ['i', 'j', 'c'].includes(k));
     const copyLike = mod && !e.shiftKey && !e.altKey && ['c', 'x', 'a', 's', 'p', 'u'].includes(k);
-    if (devtools || copyLike) e.preventDefault();
+    const inInput = e.target instanceof Element && e.target.closest('input');
+    if (devtools || (copyLike && !(inInput && (k === 'a' || k === 'x')))) e.preventDefault();
   });
 
   /* ---------- 作答中不能隨便離開 ---------- */
@@ -231,130 +243,246 @@
 
   /* ---------- 考卷：狀態 ---------- */
 
-  function buildState(exam) {
-    const order = exam.questions.map((_, i) => i);
-    shuffle(order); // 題序一律在每次進來（含重做）時重新打亂，不看考卷檔的 shuffleQuestions
-    const items = order.map((qi, i) => {
-      const q = exam.questions[qi];
-      const optOrder = [0, 1, 2, 3];
-      if (exam.shuffleOptions) shuffle(optOrder);
-      return { n: i + 1, q, optOrder, correct: optOrder.indexOf(q.answer), picked: null };
-    });
-    // stats：作答時間與「離開頁面」紀錄，交卷後顯示在成績單上
-    return { exam, items, submitted: false, stats: { start: Date.now(), end: null, leaves: 0, awayMs: 0 } };
+  // 題型：single 一般選擇（可含兩個空格、對話）／cloze 短文多空／reading 閱讀題組／spell 拼字
+  // 預設是否打亂題序：只有 single 與 spell 會打亂；cloze 的空格與題號綁定、reading 依文章順序，不打亂
+  const SHUFFLE_DEFAULT = { single: true, spell: true, cloze: false, reading: false };
+
+  // 舊格式（只有 questions）視為單一區、不顯示區標題、每題 1 分
+  function normalize(exam) {
+    if (Array.isArray(exam.sections)) return { sections: exam.sections, legacy: false };
+    return { sections: [{ title: null, type: 'single', points: 1, shuffle: true, questions: exam.questions }], legacy: true };
   }
 
-  const isRight = (it) => it.picked === it.correct;
+  function buildState(exam) {
+    const { sections, legacy } = normalize(exam);
+    const items = [];
+    const secs = sections.map((sec) => {
+      const type = sec.type;
+      const points = sec.points || 1;
+      const order = sec.questions.map((_, i) => i);
+      if (type !== 'cloze' && (sec.shuffle ?? SHUFFLE_DEFAULT[type])) shuffle(order);
+      const secObj = { sec, type, points, items: [] };
+      for (const qi of order) {
+        const q = sec.questions[qi];
+        const it = { n: items.length + 1, q, secObj, type, points, blanks: [] };
+        if (type === 'spell') {
+          it.typed = '';
+        } else {
+          const optOrder = [0, 1, 2, 3];
+          if (exam.shuffleOptions) shuffle(optOrder);
+          it.optOrder = optOrder;
+          it.correct = optOrder.indexOf(q.answer);
+          it.picked = null;
+        }
+        items.push(it);
+        secObj.items.push(it);
+      }
+      return secObj;
+    });
+    // stats：作答時間與「離開頁面」紀錄，交卷後顯示在成績單上
+    return { exam, legacy, secs, items, submitted: false, stats: { start: Date.now(), end: null, leaves: 0, awayMs: 0 } };
+  }
+
+  const normSpell = (t) => String(t).trim().toLowerCase().replace(/\s+/g, ' ');
+  const answered = (it) => (it.type === 'spell' ? it.typed.trim() !== '' : it.picked != null);
+  const isRight = (it) => (it.type === 'spell'
+    ? [it.q.answer, ...(it.q.accept || [])].map(normSpell).includes(normSpell(it.typed))
+    : it.picked === it.correct);
   const optText = (it, k) => it.q.options[it.optOrder[k]];
+  const optParts = (text) => text.split(' / '); // 兩個空格的題目，選項以 " / " 分成兩段
+  const spellHint = (word) => [...word].map((c, i, a) => (i === 0 || i === a.length - 1 || !/[A-Za-z]/.test(c) ? c : '_')).join(' ');
 
   /* ---------- 考卷：畫面 ---------- */
 
-  function blankEl(it, submitted) {
-    const el = h('span', { class: 'blank' });
-    fillBlank(el, it, submitted);
+  function newBlank(it) {
+    const el = h('span', { class: 'blank' + (it.type === 'cloze' ? ' cloze' : ''), 'data-n': it.n });
+    it.blanks.push(el);
     return el;
   }
 
-  function fillBlank(el, it, submitted) {
-    el.replaceChildren();
-    if (submitted) {
-      el.classList.add('done');
-      el.textContent = optText(it, it.correct);
-    } else if (it.picked != null) {
-      el.textContent = optText(it, it.picked);
-    } else {
-      el.append(h('span', { class: 'sr-only', text: '空格' }));
-    }
+  // 依目前選擇（或交卷後的正解）填入空格；兩個空格的選項依序拆開填
+  function fillBlanks(it, submitted) {
+    const idx = submitted ? it.correct : it.picked;
+    const parts = idx == null ? [] : optParts(optText(it, idx));
+    it.blanks.forEach((el, i) => {
+      el.replaceChildren();
+      el.classList.toggle('done', submitted);
+      if (idx != null) el.textContent = parts[i] ?? parts[0];
+      else if (it.type !== 'cloze') el.append(h('span', { class: 'sr-only', text: '空格' }));
+    });
   }
 
   function questionEl(state, it, hooks) {
     const { q, n } = it;
     const sub = state.submitted;
     const right = sub && isRight(it);
-    const [pre, post] = q.sentence.split('___');
-    const blank = blankEl(it, sub);
+    let card = null;
 
     const head = h('div', { class: 'q-head' },
       h('span', { class: 'qnum', text: `第 ${n} 題` }),
       q.category ? h('span', { class: 'tag', text: q.category }) : null,
+      !state.legacy && it.points > 1 ? h('span', { class: 'tag', text: `${it.points} 分` }) : null,
       sub ? h('span', { class: right ? 'badge ok' : 'badge bad', text: right ? '✓ 答對' : '✗ 答錯' }) : null
     );
 
-    const opts = h('div', { class: 'opts', role: 'radiogroup', 'aria-labelledby': `qs-${n}` },
-      it.optOrder.map((_, k) => {
-        const id = `q${n}-o${k}`;
-        let cls = 'opt';
-        let mark = null;
-        if (sub) {
-          if (k === it.correct) {
-            cls += ' is-answer';
-            mark = it.picked === k ? '✓ 你的答案（正確）' : '✓ 正確答案';
-          } else if (k === it.picked) {
-            cls += ' is-miss';
-            mark = '✗ 你的答案';
+    let stem = null;
+    let opts = null;
+    let spellInput = null;
+
+    if (it.type === 'spell') {
+      const [pre, post] = q.sentence.split('___');
+      spellInput = h('input', {
+        type: 'text', class: 'spell-input', id: `q${n}-in`, maxlength: '40',
+        autocomplete: 'off', autocapitalize: 'none', autocorrect: 'off', spellcheck: 'false',
+        'aria-label': `第 ${n} 題：拼出單字`, disabled: sub
+      });
+      spellInput.size = Math.max(7, Math.ceil((q.hint || spellHint(q.answer)).length / 2) + 1);
+      spellInput.value = it.typed;
+      if (sub) spellInput.classList.add(right ? 'is-ok' : 'is-no');
+      else {
+        spellInput.addEventListener('input', () => {
+          it.typed = spellInput.value;
+          card.classList.toggle('answered', answered(it));
+          hooks.onPick();
+        });
+      }
+      stem = [
+        h('p', { class: 'sentence', id: `qs-${n}` }, pre, spellInput, post),
+        h('p', { class: 'spell-hint' }, '提示：', h('code', { text: q.hint || spellHint(q.answer) }), '（首、尾字母已給，其餘每個底線代表一個字母）')
+      ];
+    } else {
+      if (it.type === 'single') {
+        const segs = q.sentence.split('___');
+        const kids = [segs[0]];
+        for (let i = 1; i < segs.length; i++) kids.push(newBlank(it), segs[i]);
+        stem = h('p', { class: 'sentence', id: `qs-${n}` }, kids);
+      } else if (it.type === 'reading') {
+        stem = h('p', { class: 'sentence', id: `qs-${n}`, text: q.stem });
+      }
+      fillBlanks(it, sub);
+
+      opts = h('div', { class: 'opts', role: 'radiogroup', 'aria-labelledby': stem ? `qs-${n}` : `q-${n}` },
+        it.optOrder.map((_, k) => {
+          const id = `q${n}-o${k}`;
+          let cls = 'opt';
+          let mark = null;
+          if (sub) {
+            if (k === it.correct) {
+              cls += ' is-answer';
+              mark = it.picked === k ? '✓ 你的答案（正確）' : '✓ 正確答案';
+            } else if (k === it.picked) {
+              cls += ' is-miss';
+              mark = '✗ 你的答案';
+            }
           }
-        }
-        const input = h('input', { type: 'radio', name: `q${n}`, id, value: k, disabled: sub });
-        input.checked = it.picked === k;
-        if (!sub) {
-          input.addEventListener('change', () => {
-            it.picked = k;
-            fillBlank(blank, it, false);
-            card.classList.add('answered');
-            hooks.onPick();
-          });
-        }
-        return h('div', { class: cls },
-          input,
-          h('label', { for: id },
-            h('span', { class: 'letter', text: LETTERS[k] }),
-            h('span', { class: 'opt-body' },
-              h('span', { class: 'opt-text', text: optText(it, k) }),
-              mark ? h('span', { class: 'mark', text: mark }) : null
+          const input = h('input', { type: 'radio', name: `q${n}`, id, value: k, disabled: sub });
+          input.checked = it.picked === k;
+          if (!sub) {
+            input.addEventListener('change', () => {
+              it.picked = k;
+              fillBlanks(it, false);
+              card.classList.add('answered');
+              hooks.onPick();
+            });
+          }
+          return h('div', { class: cls },
+            input,
+            h('label', { for: id },
+              h('span', { class: 'letter', text: LETTERS[k] }),
+              h('span', { class: 'opt-body' },
+                h('span', { class: 'opt-text', text: optText(it, k) }),
+                mark ? h('span', { class: 'mark', text: mark }) : null
+              )
             )
-          )
-        );
-      })
-    );
+          );
+        })
+      );
+    }
 
     const explain = sub
       ? h('div', { class: 'explain' },
           h('dl', null,
-            h('div', null, h('dt', { text: '正確答案' }),
-              h('dd', { text: `${LETTERS[it.correct]}. ${optText(it, it.correct)}` })),
+            it.type === 'spell'
+              ? [
+                  h('div', null, h('dt', { text: '正確答案' }), h('dd', { text: q.answer })),
+                  h('div', null, h('dt', { text: '你的答案' }), h('dd', { text: it.typed.trim() || '（沒有作答）' }))
+                ]
+              : h('div', null, h('dt', { text: '正確答案' }),
+                  h('dd', { text: `${LETTERS[it.correct]}. ${optText(it, it.correct)}` })),
             h('div', null, h('dt', { text: '中文翻譯' }), h('dd', { text: q.zh })),
             h('div', null, h('dt', { text: '重點解析' }), h('dd', { text: q.note }))
           ))
       : null;
 
-    const card = h('article', {
-      class: 'q' + (sub ? (right ? ' is-right' : ' is-wrong') : ''),
+    card = h('article', {
+      class: 'q t-' + it.type + (sub ? (right ? ' is-right' : ' is-wrong') : '') + (answered(it) && !sub ? ' answered' : ''),
       id: `q-${n}`,
       tabindex: '-1'
-    },
-      head,
-      h('p', { class: 'sentence', id: `qs-${n}` }, pre, blank, post),
-      opts,
-      explain
-    );
+    }, head, stem, opts, explain);
     return card;
   }
 
-  function summaryEl(state, actions) {
-    const { items } = state;
-    const total = items.length;
-    const right = items.filter(isRight).length;
-    const wrong = items.filter((it) => !isRight(it));
-    const pct = Math.round((right / total) * 100);
+  // 區標題（有 title 才顯示）、短文（cloze／reading）
+  function sectionHeadEl(state, secObj) {
+    const { sec, items, points } = secObj;
+    return h('header', { class: 'sec-head' },
+      h('h2', { text: sec.title }),
+      h('p', { class: 'sec-meta', text: `共 ${items.length} 題・每題 ${points} 分` }),
+      sec.intro ? h('p', { class: 'sec-intro', text: sec.intro }) : null
+    );
+  }
 
-    const cats = CATEGORIES
-      .map((c) => {
-        const group = items.filter((it) => it.q.category === c);
-        if (!group.length) return null;
-        const ok = group.filter(isRight).length;
-        return h('li', { text: `${c} ${ok} / ${group.length}（${Math.round((ok / group.length) * 100)}%）` });
-      })
-      .filter(Boolean);
+  function passageEl(state, secObj) {
+    const { sec, items, type } = secObj;
+    const box = h('div', { class: 'passage-body' });
+    if (type === 'cloze') {
+      // 空格依序對應各題；點空格可跳到該題
+      const segs = sec.passage.split('___');
+      const kids = [segs[0]];
+      for (let i = 1; i < segs.length; i++) {
+        const it = items[i - 1];
+        const blank = newBlank(it);
+        blank.setAttribute('role', 'button');
+        blank.setAttribute('tabindex', '0');
+        blank.setAttribute('aria-label', `跳到第 ${it.n} 題`);
+        blank.addEventListener('click', () => jumpTo(it.n));
+        blank.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); jumpTo(it.n); } });
+        fillBlanks(it, state.submitted);
+        kids.push(blank, segs[i]);
+      }
+      box.append(...kids.map((k) => (typeof k === 'string' ? document.createTextNode(k) : k)));
+    } else {
+      box.textContent = sec.passage;
+    }
+    return h('article', { class: 'passage', 'aria-label': '短文' }, box);
+  }
+
+  function summaryEl(state, actions) {
+    const { items, secs, legacy } = state;
+    const total = items.length;
+    const rightItems = items.filter(isRight);
+    const wrong = items.filter((it) => !isRight(it));
+    const totalPts = items.reduce((n, it) => n + it.points, 0);
+    const score = rightItems.reduce((n, it) => n + it.points, 0);
+    const pct = Math.round((score / totalPts) * 100);
+
+    let cats;
+    if (legacy) {
+      cats = CATEGORIES
+        .map((c) => {
+          const group = items.filter((it) => it.q.category === c);
+          if (!group.length) return null;
+          const ok = group.filter(isRight).length;
+          return h('li', { text: `${c} ${ok} / ${group.length}（${Math.round((ok / group.length) * 100)}%）` });
+        })
+        .filter(Boolean);
+    } else {
+      cats = secs.map((s) => {
+        const sp = s.items.reduce((n, it) => n + it.points, 0);
+        const ok = s.items.filter(isRight).reduce((n, it) => n + it.points, 0);
+        return h('li', { text: `${s.sec.title} ${ok} / ${sp} 分` });
+      });
+    }
 
     const wrongBox = h('div', { class: 'wrong-box' },
       h('h2', { text: wrong.length ? `答錯的題號（共 ${wrong.length} 題）` : '錯誤題號' }),
@@ -369,11 +497,12 @@
 
     return h('section', { class: 'summary', id: 'summary', tabindex: '-1', 'aria-label': '成績' },
       h('div', { class: 'score' },
-        h('span', { class: 'big', text: String(right) }),
-        h('span', { class: 'of', text: `/ ${total} 題` }),
-        h('span', { class: 'pct', text: `${pct}%` })
+        h('span', { class: 'big', text: String(legacy ? rightItems.length : score) }),
+        h('span', { class: 'of', text: legacy ? `/ ${total} 題` : `/ ${totalPts} 分` }),
+        h('span', { class: 'pct', text: `${pct}%` }),
+        legacy ? null : h('span', { class: 'of', text: `（答對 ${rightItems.length} / ${total} 題）` })
       ),
-      cats.length ? h('ul', { class: 'cats', 'aria-label': '各題型答對率' }, cats) : null,
+      cats.length ? h('ul', { class: 'cats', 'aria-label': legacy ? '各題型答對率' : '各大題得分' }, cats) : null,
       h('ul', { class: 'cats run-stats', 'aria-label': '作答紀錄' },
         h('li', { text: `交卷時間 ${fmtStamp(state.stats.end)}` }),
         h('li', { text: `作答時間 ${fmtDur(state.stats.end - state.stats.start)}` }),
@@ -395,13 +524,14 @@
   let timerId = 0;
 
   function renderExam(state, { focusSummary = false } = {}) {
-    const { exam, items } = state;
+    const { exam, items, secs, legacy } = state;
     live = state.submitted ? null : state;
     awaySince = null;
     onAwayChange = () => {};
     clearInterval(timerId);
     document.title = `${exam.title}｜${BASE_TITLE}`;
     const total = items.length;
+    const totalPts = items.reduce((n, it) => n + it.points, 0);
 
     const list = h('div', { class: 'questions', id: 'questions' });
     const redo = () => { renderExam(buildState(exam)); window.scrollTo(0, 0); };
@@ -409,7 +539,7 @@
     // 作答中：底部進度列與「尚未作答」清單
     let bar = null, todoBox = null, submitBtn = null, progText = null, progSub = null, meter = null;
     const refresh = () => {
-      const missing = items.filter((it) => it.picked == null);
+      const missing = items.filter((it) => !answered(it));
       const done = total - missing.length;
       progText.textContent = `已作答 ${done} / ${total}`;
       progSub.textContent = missing.length ? `還有 ${missing.length} 題沒寫` : '全部寫完了，可以交卷';
@@ -424,11 +554,15 @@
       );
     };
 
-    for (const it of items) list.append(questionEl(state, it, { onPick: () => refresh() }));
+    for (const s of secs) {
+      if (s.sec.title) list.append(sectionHeadEl(state, s));
+      if (s.type === 'cloze' || s.type === 'reading') list.append(passageEl(state, s));
+      for (const it of s.items) list.append(questionEl(state, it, { onPick: () => refresh() }));
+    }
 
     const head = h('header', { class: 'exam-head' },
       h('h1', { text: exam.title }),
-      h('p', { text: `${exam.scope}・共 ${total} 題` })
+      h('p', { text: `${exam.scope}・共 ${total} 題` + (legacy ? '' : `・滿分 ${totalPts} 分`) })
     );
     const back = h('a', { class: 'back', href: '#/', text: '‹ 考卷列表' });
 
@@ -438,7 +572,7 @@
       meter = h('div', { class: 'meter', 'aria-hidden': 'true' }, h('div'));
       submitBtn = h('button', { type: 'button', class: 'btn primary', disabled: true, text: '交卷' });
       submitBtn.addEventListener('click', () => {
-        if (items.some((it) => it.picked == null)) return;
+        if (items.some((it) => !answered(it))) return;
         state.submitted = true;
         state.stats.end = Date.now();
         renderExam(state, { focusSummary: true });

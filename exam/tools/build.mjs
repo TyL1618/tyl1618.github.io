@@ -22,8 +22,21 @@ const argv = process.argv.slice(2);
 const checkOnly = argv.includes('--check');
 
 const CATEGORIES = ['單字', '片語', '文法'];
-const EXAM_KEYS = ['id', 'title', 'scope', 'questionCount', 'shuffleQuestions', 'shuffleOptions', 'questions', 'secret'];
-const Q_KEYS = ['id', 'category', 'sentence', 'options', 'answer', 'zh', 'note'];
+const EXAM_KEYS = ['id', 'title', 'scope', 'questionCount', 'shuffleQuestions', 'shuffleOptions', 'questions', 'sections', 'secret'];
+const Q_KEYS = ['id', 'category', 'sentence', 'stem', 'options', 'answer', 'hint', 'accept', 'zh', 'note'];
+// sections 格式（仿段考多題型）：每個 section 一種題型
+//   single  單一（或兩個）___ 的四選一；sentence 可含換行（對話）；兩空時每個選項要用 " / " 分成兩段
+//   cloze   一篇短文 passage 內有多個 ___，questions 依序對應各空格，每題四選一
+//   reading 一篇 passage 加多題，每題有 stem（題幹）與四個選項
+//   spell   文意字彙：sentence 有一個 ___，answer 是要拼出來的英文單字（自動產生首尾字母提示 hint）
+const SECTION_KEYS = ['id', 'title', 'type', 'points', 'intro', 'passage', 'shuffle', 'questions'];
+const SECTION_TYPES = ['single', 'cloze', 'reading', 'spell'];
+const SECRET_KEYS = ['answer', 'zh', 'note', 'accept'];
+
+const spellHint = (word) => {
+  const cs = [...word];
+  return cs.map((c, i) => (i === 0 || i === cs.length - 1 || !/[A-Za-z]/.test(c) ? c : '_')).join(' ');
+};
 
 /* ---------- 加密／解密 ---------- */
 
@@ -33,6 +46,30 @@ const b64decode = (s) => JSON.parse(Buffer.from(s, 'base64').toString('utf8'));
 function encodeExam(exam) {
   const out = { id: exam.id, title: exam.title, scope: exam.scope, questionCount: exam.questionCount };
   for (const k of ['shuffleQuestions', 'shuffleOptions']) if (k in exam) out[k] = exam[k];
+  if (Array.isArray(exam.sections)) {
+    // sections 格式：公開欄位照原樣保留，只把 SECRET_KEYS 收進 secret（依序攤平所有題目）
+    const secret = [];
+    out.sections = exam.sections.map((sec) => {
+      const o = {};
+      for (const [k, v] of Object.entries(sec)) {
+        if (k !== 'questions') o[k] = v;
+      }
+      o.questions = sec.questions.map((q) => {
+        const pub = {};
+        const sec1 = {};
+        for (const [k, v] of Object.entries(q)) {
+          if (SECRET_KEYS.includes(k)) sec1[k] = v;
+          else pub[k] = v;
+        }
+        if (sec.type === 'spell' && !pub.hint) pub.hint = spellHint(String(q.answer));
+        secret.push(sec1);
+        return pub;
+      });
+      return o;
+    });
+    out.secret = b64encode(secret);
+    return out;
+  }
   out.questions = exam.questions.map((q) => {
     const o = { id: q.id };
     if ('category' in q) o.category = q.category;
@@ -47,6 +84,18 @@ function encodeExam(exam) {
 // 把有 secret 的考卷還原成完整明文結構；失敗時丟出 Error
 function decodeExam(exam) {
   const sec = b64decode(exam.secret);
+  if (Array.isArray(exam.sections)) {
+    const total = exam.sections.reduce((n, s) => n + (Array.isArray(s.questions) ? s.questions.length : 0), 0);
+    if (!Array.isArray(sec) || sec.length !== total) throw new Error('secret 內的題數與 sections 不符');
+    let i = 0;
+    const out = { ...exam };
+    delete out.secret;
+    out.sections = exam.sections.map((s) => ({
+      ...s,
+      questions: s.questions.map((q) => ({ ...q, ...sec[i++] }))
+    }));
+    return out;
+  }
   if (!Array.isArray(sec) || !Array.isArray(exam.questions) || sec.length !== exam.questions.length) {
     throw new Error('secret 內的題數與 questions 不符');
   }
@@ -133,6 +182,63 @@ const listJson = (dir) => (existsSync(dir) ? readdirSync(dir) : [])
   .filter((f) => f.endsWith('.json') && f !== 'index.json')
   .sort();
 
+// 驗證單一題目。legacy = 舊格式（整份只有 questions、單一空格）
+function validateQ(file, where, q, type, seenQ, legacy = false) {
+  if (q === null || typeof q !== 'object' || Array.isArray(q)) { err(file, where, '必須是物件'); return; }
+  for (const k of Object.keys(q)) {
+    if (!Q_KEYS.includes(k)) warn(file, where, `未知欄位 "${k}"`);
+  }
+  if (!isInt(q.id)) err(file, where, 'id 缺少或不是整數');
+  else if (seenQ.has(q.id)) err(file, where, `題目 id ${q.id} 重複`);
+  else seenQ.add(q.id);
+
+  if ('category' in q && !CATEGORIES.includes(q.category)) {
+    err(file, where, `category 只能是 ${CATEGORIES.join('、')}（目前是 ${JSON.stringify(q.category)}）`);
+  }
+
+  // 題幹：single / spell 用 sentence（含 ___）；reading 用 stem；cloze 沒有題幹（空格在 passage 裡）
+  let blanks = 0;
+  if (type === 'single' || type === 'spell') {
+    if (!isStr(q.sentence)) err(file, where, 'sentence 缺少或不是字串');
+    else {
+      const runs = q.sentence.match(/_+/g) || [];
+      blanks = q.sentence.split('___').length - 1;
+      const maxBlanks = type === 'single' && !legacy ? 2 : 1;
+      if (runs.some((r) => r !== '___') || blanks < 1 || blanks > maxBlanks) {
+        err(file, where, `sentence 必須有${maxBlanks === 2 ? ' 1 或 2 個' : '恰好一個'} "___"（目前底線片段：${runs.length ? runs.map((r) => `"${r}"`).join('、') : '無'}）`);
+      }
+    }
+  } else if (type === 'reading') {
+    if (!isStr(q.stem)) err(file, where, 'reading 題需要 stem（題幹）');
+  } else if (type === 'cloze' && 'sentence' in q) {
+    warn(file, where, 'cloze 題不需要 sentence');
+  }
+
+  if (type === 'spell') {
+    if (!isStr(q.answer) || !/^[A-Za-z][A-Za-z' -]*[A-Za-z]$/.test(q.answer.trim())) {
+      err(file, where, `spell 題的 answer 必須是英文單字字串（目前是 ${JSON.stringify(q.answer)}）`);
+    }
+    if ('accept' in q && !(Array.isArray(q.accept) && q.accept.every(isStr))) err(file, where, 'accept 必須是字串陣列');
+    if ('hint' in q && !isStr(q.hint)) err(file, where, 'hint 必須是非空字串');
+    if ('options' in q) warn(file, where, 'spell 題不需要 options');
+  } else {
+    if (!Array.isArray(q.options) || q.options.length !== 4) {
+      err(file, where, `options 必須恰好 4 個（目前是 ${Array.isArray(q.options) ? q.options.length : '非陣列'} 個）`);
+    } else {
+      if (!q.options.every(isStr)) err(file, where, 'options 每一項都必須是非空字串');
+      else if (new Set(q.options.map((o) => o.trim().toLowerCase())).size !== 4) err(file, where, 'options 有重複的選項');
+      else if (blanks === 2 && !q.options.every((o) => o.split(' / ').length === 2)) {
+        err(file, where, '兩個空格的題目，每個選項都要用 " / " 分成恰好兩段（例如 "which / lives"）');
+      }
+    }
+    if (!isInt(q.answer) || q.answer < 0 || q.answer > 3) {
+      err(file, where, `answer 必須是 0~3 的整數（目前是 ${JSON.stringify(q.answer)}）`);
+    }
+  }
+  if (!isStr(q.zh)) err(file, where, 'zh（中文翻譯）缺少或是空的');
+  if (!isStr(q.note)) err(file, where, 'note（重點解析）缺少或是空的');
+}
+
 const sources = [
   ...listJson(examsDir).map((f) => ({ f, dir: examsDir, locked: false })),
   ...listJson(lockedDir).map((f) => ({ f, dir: lockedDir, locked: true }))
@@ -187,57 +293,55 @@ for (const { f, dir, locked } of sources) {
     if (k in exam && typeof exam[k] !== 'boolean') err(file, '', `${k} 必須是 true 或 false`);
   }
 
-  if (!Array.isArray(exam.questions) || exam.questions.length === 0) {
-    err(file, '', 'questions 必須是非空陣列');
-    continue;
+  const seenQ = new Set();
+  let total = 0;
+  let withCat = 0;
+
+  if (Array.isArray(exam.sections)) {
+    if ('questions' in exam) err(file, '', 'sections 與 questions 不能同時存在');
+    if (exam.sections.length === 0) { err(file, '', 'sections 不能是空陣列'); continue; }
+    exam.sections.forEach((sec, si) => {
+      const sw = `第 ${si + 1} 區`;
+      if (sec === null || typeof sec !== 'object' || Array.isArray(sec)) { err(file, sw, '必須是物件'); return; }
+      for (const k of Object.keys(sec)) if (!SECTION_KEYS.includes(k)) warn(file, sw, `未知欄位 "${k}"`);
+      if (!isStr(sec.title)) err(file, sw, 'title 缺少或不是字串');
+      if (!SECTION_TYPES.includes(sec.type)) { err(file, sw, `type 只能是 ${SECTION_TYPES.join('、')}`); return; }
+      if ('points' in sec && !(isInt(sec.points) && sec.points >= 1)) err(file, sw, 'points 必須是 >= 1 的整數');
+      if ('intro' in sec && !isStr(sec.intro)) err(file, sw, 'intro 必須是非空字串');
+      if ('shuffle' in sec && typeof sec.shuffle !== 'boolean') err(file, sw, 'shuffle 必須是 true 或 false');
+      if (!Array.isArray(sec.questions) || sec.questions.length === 0) { err(file, sw, 'questions 必須是非空陣列'); return; }
+      if (sec.type === 'cloze' || sec.type === 'reading') {
+        if (!isStr(sec.passage)) err(file, sw, `${sec.type} 區需要 passage（短文）`);
+        else if (sec.type === 'cloze') {
+          const runs = sec.passage.match(/_+/g) || [];
+          const blanks = sec.passage.split('___').length - 1;
+          if (runs.some((r) => r !== '___')) err(file, sw, 'passage 的空格一律寫成三個底線 "___"');
+          else if (blanks !== sec.questions.length) err(file, sw, `passage 有 ${blanks} 個空格，但 questions 有 ${sec.questions.length} 題`);
+        }
+      } else if ('passage' in sec) warn(file, sw, `${sec.type} 區不會顯示 passage`);
+      sec.questions.forEach((q, i) => {
+        total++;
+        validateQ(file, `${sw}第 ${i + 1} 題（id ${q && q.id}）`, q, sec.type, seenQ);
+        if (q && typeof q === 'object' && 'category' in q) withCat++;
+      });
+    });
+  } else {
+    if (!Array.isArray(exam.questions) || exam.questions.length === 0) {
+      err(file, '', 'questions（或 sections）必須是非空陣列');
+      continue;
+    }
+    exam.questions.forEach((q, i) => {
+      total++;
+      validateQ(file, `第 ${i + 1} 題`, q, 'single', seenQ, true);
+      if (q && typeof q === 'object' && 'category' in q) withCat++;
+    });
+    if (withCat !== 0 && withCat !== exam.questions.length) {
+      warn(file, '', `只有 ${withCat}/${exam.questions.length} 題有 category；沒標的題目不會計入題型統計`);
+    }
   }
   if (!isInt(exam.questionCount)) err(file, '', 'questionCount 缺少或不是整數');
-  else if (exam.questionCount !== exam.questions.length) {
-    err(file, '', `questionCount 是 ${exam.questionCount}，但實際有 ${exam.questions.length} 題`);
-  }
-
-  const seenQ = new Set();
-  let withCat = 0;
-  exam.questions.forEach((q, i) => {
-    const where = `第 ${i + 1} 題`;
-    if (q === null || typeof q !== 'object' || Array.isArray(q)) { err(file, where, '必須是物件'); return; }
-
-    for (const k of Object.keys(q)) {
-      if (!Q_KEYS.includes(k)) warn(file, where, `未知欄位 "${k}"`);
-    }
-    if (!isInt(q.id)) err(file, where, 'id 缺少或不是整數');
-    else if (seenQ.has(q.id)) err(file, where, `題目 id ${q.id} 重複`);
-    else seenQ.add(q.id);
-
-    if ('category' in q) {
-      withCat++;
-      if (!CATEGORIES.includes(q.category)) err(file, where, `category 只能是 ${CATEGORIES.join('、')}（目前是 ${JSON.stringify(q.category)}）`);
-    }
-
-    if (!isStr(q.sentence)) err(file, where, 'sentence 缺少或不是字串');
-    else {
-      const runs = q.sentence.match(/_+/g) || [];
-      const blanks = q.sentence.split('___').length - 1;
-      if (runs.length !== 1 || runs[0] !== '___' || blanks !== 1) {
-        err(file, where, `sentence 必須恰好有一個 "___"（目前底線片段：${runs.length ? runs.map((r) => `"${r}"`).join('、') : '無'}）`);
-      }
-    }
-
-    if (!Array.isArray(q.options) || q.options.length !== 4) {
-      err(file, where, `options 必須恰好 4 個（目前是 ${Array.isArray(q.options) ? q.options.length : '非陣列'} 個）`);
-    } else {
-      if (!q.options.every(isStr)) err(file, where, 'options 每一項都必須是非空字串');
-      else if (new Set(q.options.map((o) => o.trim().toLowerCase())).size !== 4) err(file, where, 'options 有重複的選項');
-    }
-
-    if (!isInt(q.answer) || q.answer < 0 || q.answer > 3) {
-      err(file, where, `answer 必須是 0~3 的整數（目前是 ${JSON.stringify(q.answer)}）`);
-    }
-    if (!isStr(q.zh)) err(file, where, 'zh（中文翻譯）缺少或是空的');
-    if (!isStr(q.note)) err(file, where, 'note（重點解析）缺少或是空的');
-  });
-  if (withCat !== 0 && withCat !== exam.questions.length) {
-    warn(file, '', `只有 ${withCat}/${exam.questions.length} 題有 category；沒標的題目不會計入題型統計`);
+  else if (exam.questionCount !== total) {
+    err(file, '', `questionCount 是 ${exam.questionCount}，但實際有 ${total} 題`);
   }
 
   if (isStr(exam.id) && isStr(exam.title) && isStr(exam.scope) && isInt(exam.questionCount)) {

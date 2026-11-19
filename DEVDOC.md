@@ -188,6 +188,35 @@ exam/
 | `answer` | 正確選項的索引 0~3 |
 | `zh` / `note` | 中文翻譯／重點解析，不可空白 |
 
+### 多題型格式（`sections`，仿段考卷）
+
+2026-11-19 新增。考卷 JSON 可以不用 `questions`，改用 `sections`（兩者擇一，舊考卷維持原格式不用改）。每個 section 是一個大題、一種題型：
+
+```json
+{
+  "id": "1201", "title": "2026/12/01", "scope": "…", "questionCount": 50,
+  "sections": [
+    { "title": "一、字彙", "type": "single", "points": 1, "intro": "（選填）說明", "questions": [ … ] },
+    { "title": "三、克漏字（一）", "type": "cloze", "points": 2,
+      "passage": "Last summer, I joined a student ___ program … ___ …", "questions": [ … ] }
+  ]
+}
+```
+
+| `type` | 說明 | 題目欄位 |
+|---|---|---|
+| `single` | 一般選擇。`sentence` 可含換行（寫對話）；**可有 1 或 2 個 `___`**，兩個空格時每個選項要用 `" / "` 分成兩段（如 `"hangs / which"`），選了之後依序填入兩格 | `sentence`、`options`(4)、`answer`(0~3)、`zh`、`note`、`category`(選填) |
+| `cloze` | 短文多空。`passage` 內的 `___` 依序對應 `questions`（空格數必須等於題數），空格顯示題號、點了跳到該題；**不打亂題序** | `options`、`answer`、`zh`、`note`（沒有 `sentence`） |
+| `reading` | 閱讀題組。`passage` 為文章，每題有題幹 | `stem`、`options`、`answer`、`zh`、`note` |
+| `spell` | 文意字彙（拼字）。`sentence` 有一個 `___`，學生在輸入框拼字，畫面上顯示首尾字母提示（如 `d _ _ _ _ _ _ _ t`）。比對時不分大小寫、忽略前後空白 | `sentence`、`answer`(字串)、`accept`(選填，其他可接受的拼法)、`zh`、`note`；`hint` 由 build 自動產生 |
+
+- `points`：每題配分（預設 1）。有 `sections` 的考卷成績單顯示「得分／滿分 分」與每個大題的得分；舊格式仍顯示題數與題型答對率。
+- `questionCount` 是全部題數；題目 `id` 全卷唯一，依大題順序連續編號即可（畫面上的題號是依顯示順序重新編的）。
+- 預設 `single`、`spell` 會在大題內打亂題序，`cloze`、`reading` 不打亂；可用 section 的 `shuffle` 覆寫（`cloze` 一律不打亂）。
+- 加密：`answer`、`zh`、`note`、`accept` 收進 `secret`，`passage` 與 `hint` 是公開的。`build.mjs` 的驗證會檢查題型欄位、cloze 空格數、兩空格選項格式等。
+- 1201（第二次段考模擬）就是這種格式：字彙 10×1、綜合測驗 10×2（含 4 題兩個空格）、克漏字 10×2、對話 6×2、閱讀 4×2、文意字彙 10×1，共 50 題、80 分。沒有雜誌題，也沒有手寫題（句子重組、翻譯填空、中翻英）。
+- 前端檔案改版時，`index.html` 的 `exam.js?v=N`、`exam.css?v=N` 要跟著加一，避免學生的瀏覽器用舊的 JS 讀新格式考卷（舊 JS 讀不到 `sections` 會顯示「找不到這份考卷」）。
+
 ### 行為摘要
 
 - **作答中（還沒交卷）不能隨便離開**：關閉分頁／重新整理會跳出瀏覽器的確認視窗（`beforeunload`，文字無法自訂，且瀏覽器要求頁面上有過操作才會跳）；點「考卷列表」或按上一頁會先 `confirm`，取消就留在原處。交卷後不再攔。這只是確認，不是強制：學生仍可選擇離開，離開後進度與題序都不保留。
